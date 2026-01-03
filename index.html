@@ -22,11 +22,43 @@
             </div>
           </div>
           <button id="clearRoutes">Clear Routes</button>
+          <button id="setStartLocation">Set Start Location</button>
           <div id="routeInfo"></div>
         </div>
       </header>
       <div id="map"></div>
     </div>
+
+    <!-- Modal for location selection -->
+    <div id="locationModal" class="modal hidden">
+      <div class="modal-overlay"></div>
+      <div class="modal-content">
+        <h2>Set Your Starting Location</h2>
+        <div class="location-options">
+          <button id="useCurrentLocation" class="location-option">
+            <span class="icon">📍</span>
+            <span class="title">Use My Location</span>
+            <span class="description">Use GPS to set current position</span>
+          </button>
+          <button id="clickOnMap" class="location-option">
+            <span class="icon">📌</span>
+            <span class="title">Click on Map</span>
+            <span class="description">Choose any location manually</span>
+          </button>
+        </div>
+        <button id="cancelModal" class="cancel-button">Cancel</button>
+      </div>
+    </div>
+
+    <!-- Banner for map click mode -->
+    <div id="mapClickBanner" class="map-banner hidden">
+      <span>Click anywhere on the map to set your starting location</span>
+      <button id="cancelMapClick">Cancel</button>
+    </div>
+
+    <!-- Toast notifications -->
+    <div id="toast" class="toast hidden"></div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

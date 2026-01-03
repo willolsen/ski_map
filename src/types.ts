@@ -14,7 +14,7 @@ export interface SkiResort {
 }
 
 export interface RouteInfo {
-  origin: SkiResort;
+  origin: SkiResort | { name: string; location: google.maps.LatLng };
   destination: SkiResort;
   distance: string;
   duration: string;

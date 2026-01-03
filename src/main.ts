@@ -22,6 +22,11 @@ class SkiMapApp {
   private showPrecipitation: boolean = true;
   private startDay: number = 0; // First day (today)
   private endDay: number = 6;   // 7 days total (0-6)
+  // Starting location feature
+  private startingLocation: google.maps.LatLng | null = null;
+  private startingLocationMarker: google.maps.Marker | null = null;
+  private isSettingLocation: boolean = false;
+  private mapClickListener: google.maps.MapsEventListener | null = null;
 
   private getMarkerColor(pass: string): string {
     switch (pass) {
@@ -193,7 +198,35 @@ class SkiMapApp {
   }
 
   private handleResortClick(resort: SkiResort) {
-    // Add to selection
+    // NEW BEHAVIOR: If starting location is set, route directly to clicked resort
+    if (this.startingLocation) {
+      // Check if we already have a route to this resort from start
+      const existingRouteIndex = this.routes.findIndex(
+        route => route.destination.id === resort.id &&
+                 'lat' in (route.origin as any).location // Check if origin is a location, not a resort
+      );
+
+      if (existingRouteIndex >= 0) {
+        // Already have route to this resort, remove it (toggle off)
+        this.directionsRenderers[existingRouteIndex].setMap(null);
+        this.directionsRenderers.splice(existingRouteIndex, 1);
+        this.routes.splice(existingRouteIndex, 1);
+        this.highlightMarker(resort.id, false);
+
+        if (this.routes.length === 0) {
+          this.updateRouteInfo('Click a resort to route from your location');
+        } else {
+          this.updateRouteInfo(`${this.routes.length} route(s) displayed`);
+        }
+      } else {
+        // Calculate new route from starting location
+        this.highlightMarker(resort.id, true);
+        this.calculateRouteFromStart(resort);
+      }
+      return;
+    }
+
+    // EXISTING BEHAVIOR: Two-resort selection when no starting location
     if (this.selectedResorts.length === 0) {
       this.selectedResorts.push(resort);
       this.highlightMarker(resort.id, true);
@@ -468,6 +501,266 @@ class SkiMapApp {
     this.rainOverlays.forEach(overlay => overlay.setMap(show ? this.map : null));
   }
 
+  // Modal management methods
+  private showLocationModal() {
+    const modal = document.getElementById('locationModal');
+    if (modal) {
+      modal.classList.remove('hidden');
+    }
+  }
+
+  private hideLocationModal() {
+    const modal = document.getElementById('locationModal');
+    if (modal) {
+      modal.classList.add('hidden');
+    }
+  }
+
+  // Toast notification method
+  private showToast(message: string, type: 'success' | 'error' = 'success') {
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+
+    toast.textContent = message;
+    toast.style.background = type === 'success' ? '#10b981' : '#ef4444';
+    toast.classList.remove('hidden');
+
+    setTimeout(() => {
+      toast.classList.add('hidden');
+    }, 2000);
+  }
+
+  // Geolocation method
+  private useCurrentLocation() {
+    this.hideLocationModal();
+
+    if (!navigator.geolocation) {
+      this.showToast('Geolocation is not supported by your browser', 'error');
+      return;
+    }
+
+    this.updateRouteInfo('Getting your location...');
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const location = new google.maps.LatLng(
+          position.coords.latitude,
+          position.coords.longitude
+        );
+        this.setStartingLocation(location);
+        this.showToast('Starting location set!');
+        this.updateRouteInfo('Click a resort to route from your location');
+      },
+      (error) => {
+        let errorMsg = 'Unable to get your location';
+        switch(error.code) {
+          case error.PERMISSION_DENIED:
+            errorMsg = 'Location permission denied';
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMsg = 'Location unavailable';
+            break;
+          case error.TIMEOUT:
+            errorMsg = 'Location request timed out';
+            break;
+        }
+        this.showToast(errorMsg, 'error');
+        this.updateRouteInfo('');
+      },
+      { timeout: 10000, enableHighAccuracy: true }
+    );
+  }
+
+  // Map click mode methods
+  private enableMapClickMode() {
+    this.hideLocationModal();
+    this.isSettingLocation = true;
+
+    // Show banner
+    const banner = document.getElementById('mapClickBanner');
+    if (banner) {
+      banner.classList.remove('hidden');
+    }
+
+    // Change cursor
+    const mapDiv = document.getElementById('map');
+    if (mapDiv) {
+      mapDiv.classList.add('map-click-mode');
+    }
+
+    // Add click listener to map
+    this.mapClickListener = this.map.addListener('click', (event: google.maps.MapMouseEvent) => {
+      if (event.latLng && this.isSettingLocation) {
+        this.setStartingLocation(event.latLng);
+        this.disableMapClickMode();
+        this.showToast('Starting location set!');
+        this.updateRouteInfo('Click a resort to route from your location');
+      }
+    });
+  }
+
+  private disableMapClickMode() {
+    this.isSettingLocation = false;
+
+    // Hide banner
+    const banner = document.getElementById('mapClickBanner');
+    if (banner) {
+      banner.classList.add('hidden');
+    }
+
+    // Restore cursor
+    const mapDiv = document.getElementById('map');
+    if (mapDiv) {
+      mapDiv.classList.remove('map-click-mode');
+    }
+
+    // Remove click listener
+    if (this.mapClickListener) {
+      google.maps.event.removeListener(this.mapClickListener);
+      this.mapClickListener = null;
+    }
+  }
+
+  // Location management methods
+  private setStartingLocation(location: google.maps.LatLng) {
+    this.startingLocation = location;
+
+    // Remove existing marker if present
+    if (this.startingLocationMarker) {
+      this.startingLocationMarker.setMap(null);
+    }
+
+    // Create custom house icon using SVG path
+    const houseIcon = {
+      path: 'M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z',
+      fillColor: '#ef4444',
+      fillOpacity: 1,
+      strokeColor: '#ffffff',
+      strokeWeight: 2,
+      scale: 1.5,
+      anchor: new google.maps.Point(12, 24),
+    };
+
+    // Create marker
+    this.startingLocationMarker = new google.maps.Marker({
+      position: location,
+      map: this.map,
+      title: 'Starting Location',
+      icon: houseIcon,
+      draggable: true,
+      zIndex: 200,
+      label: {
+        text: 'START',
+        color: '#ef4444',
+        fontSize: '10px',
+        fontWeight: 'bold',
+      },
+    });
+
+    // Handle marker drag
+    this.startingLocationMarker.addListener('dragend', () => {
+      if (this.startingLocationMarker) {
+        const newPos = this.startingLocationMarker.getPosition();
+        if (newPos) {
+          this.startingLocation = newPos;
+          this.showToast('Starting location updated!');
+          // Clear any existing routes since start location changed
+          this.clearAllRoutes();
+        }
+      }
+    });
+
+    // Handle right-click to remove
+    this.startingLocationMarker.addListener('rightclick', () => {
+      if (confirm('Remove starting location?')) {
+        this.clearStartingLocation();
+        this.clearAllRoutes();
+        this.showToast('Starting location removed');
+      }
+    });
+
+    // Update button text
+    const button = document.getElementById('setStartLocation');
+    if (button) {
+      button.textContent = 'Update Start Location';
+    }
+
+    // Pan map to show starting location
+    this.map.panTo(location);
+  }
+
+  private clearStartingLocation() {
+    this.startingLocation = null;
+
+    if (this.startingLocationMarker) {
+      this.startingLocationMarker.setMap(null);
+      this.startingLocationMarker = null;
+    }
+
+    // Update button text
+    const button = document.getElementById('setStartLocation');
+    if (button) {
+      button.textContent = 'Set Start Location';
+    }
+
+    this.updateRouteInfo('');
+  }
+
+  // Calculate route from starting location
+  private async calculateRouteFromStart(destination: SkiResort) {
+    if (!this.startingLocation) return;
+
+    this.updateRouteInfo('Calculating route...');
+
+    try {
+      const result = await this.directionsService.route({
+        origin: this.startingLocation,
+        destination: destination.location,
+        travelMode: google.maps.TravelMode.DRIVING,
+      });
+
+      const renderer = new google.maps.DirectionsRenderer({
+        map: this.map,
+        directions: result,
+        suppressMarkers: true,
+        polylineOptions: {
+          strokeColor: '#ef4444',
+          strokeWeight: 4,
+          strokeOpacity: 0.7,
+        },
+      });
+
+      this.directionsRenderers.push(renderer);
+
+      const route = result.routes[0];
+      const leg = route.legs[0];
+
+      const routeInfo: RouteInfo = {
+        origin: {
+          name: 'Start',
+          location: this.startingLocation
+        } as any,
+        destination,
+        distance: leg.distance?.text || 'Unknown',
+        duration: leg.duration?.text || 'Unknown',
+      };
+
+      this.routes.push(routeInfo);
+
+      if (this.routes.length === 1) {
+        this.updateRouteInfo(
+          `Start → ${destination.name}: ${routeInfo.distance} (${routeInfo.duration})`
+        );
+      } else {
+        this.updateRouteInfo(`${this.routes.length} routes displayed`);
+      }
+    } catch (error) {
+      console.error('Error calculating route:', error);
+      this.showToast('Error calculating route', 'error');
+      this.highlightMarker(destination.id, false);
+    }
+  }
+
   private setupEventListeners() {
     const clearButton = document.getElementById('clearRoutes');
     if (clearButton) {
@@ -484,6 +777,54 @@ class SkiMapApp {
         toggleButton.textContent = this.showPrecipitation ? 'Hide Weather' : 'Show Weather';
       });
     }
+
+    // Starting location button
+    const setStartButton = document.getElementById('setStartLocation');
+    if (setStartButton) {
+      setStartButton.addEventListener('click', () => {
+        this.showLocationModal();
+      });
+    }
+
+    // Modal option buttons
+    const useLocationBtn = document.getElementById('useCurrentLocation');
+    if (useLocationBtn) {
+      useLocationBtn.addEventListener('click', () => {
+        this.useCurrentLocation();
+      });
+    }
+
+    const clickMapBtn = document.getElementById('clickOnMap');
+    if (clickMapBtn) {
+      clickMapBtn.addEventListener('click', () => {
+        this.enableMapClickMode();
+      });
+    }
+
+    // Modal cancel button
+    const cancelModalBtn = document.getElementById('cancelModal');
+    if (cancelModalBtn) {
+      cancelModalBtn.addEventListener('click', () => {
+        this.hideLocationModal();
+      });
+    }
+
+    // Map click banner cancel button
+    const cancelMapClickBtn = document.getElementById('cancelMapClick');
+    if (cancelMapClickBtn) {
+      cancelMapClickBtn.addEventListener('click', () => {
+        this.disableMapClickMode();
+        this.updateRouteInfo('');
+      });
+    }
+
+    // Close modal on overlay click
+    const modalOverlay = document.querySelector('.modal-overlay');
+    if (modalOverlay) {
+      modalOverlay.addEventListener('click', () => {
+        this.hideLocationModal();
+      });
+    }
   }
 
   private clearAllRoutes() {
@@ -494,7 +835,13 @@ class SkiMapApp {
     this.directionsRenderers = [];
     this.routes = [];
     this.clearSelection();
-    this.updateRouteInfo('');
+
+    // Update info based on whether starting location is set
+    if (this.startingLocation) {
+      this.updateRouteInfo('Click a resort to route from your location');
+    } else {
+      this.updateRouteInfo('');
+    }
   }
 }
 

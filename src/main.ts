@@ -23,6 +23,19 @@ class SkiMapApp {
   private startDay: number = 0; // First day (today)
   private endDay: number = 6;   // 7 days total (0-6)
 
+  private getMarkerColor(pass: string): string {
+    switch (pass) {
+      case 'IKON':
+        return '#667eea'; // Purple/Indigo
+      case 'EPIC':
+        return '#16a34a'; // Green
+      case 'INDEPENDENT':
+        return '#f97316'; // Orange
+      default:
+        return '#f59e0b'; // Amber
+    }
+  }
+
   async init() {
     await this.loadGoogleMapsAPI();
     this.initMap();
@@ -98,7 +111,7 @@ class SkiMapApp {
         icon: {
           path: google.maps.SymbolPath.CIRCLE,
           scale: 8,
-          fillColor: resort.pass === 'IKON' ? '#667eea' : resort.pass === 'EPIC' ? '#16a34a' : '#f59e0b',
+          fillColor: this.getMarkerColor(resort.pass),
           fillOpacity: 1,
           strokeColor: '#ffffff',
           strokeWeight: 2,
@@ -190,7 +203,7 @@ class SkiMapApp {
         marker.setIcon({
           path: google.maps.SymbolPath.CIRCLE,
           scale: highlight ? 12 : 8,
-          fillColor: resort.pass === 'IKON' ? '#667eea' : resort.pass === 'EPIC' ? '#16a34a' : '#f59e0b',
+          fillColor: this.getMarkerColor(resort.pass),
           fillOpacity: 1,
           strokeColor: highlight ? '#fbbf24' : '#ffffff',
           strokeWeight: highlight ? 3 : 2,

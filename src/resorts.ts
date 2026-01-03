@@ -9,7 +9,7 @@ export const skiResorts: SkiResort[] = resortData.resorts.map((resort) => ({
     lat: resort.latitude,
     lng: resort.longitude,
   },
-  pass: resort.pass as 'IKON' | 'EPIC',
+  pass: resort.pass as 'IKON' | 'EPIC' | 'INDEPENDENT',
   region: resort.region,
   country: resort.country,
   accessType: resort.access_type,

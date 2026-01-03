@@ -20,19 +20,26 @@ export interface RouteInfo {
   duration: string;
 }
 
-export interface SnowfallData {
+export interface PrecipitationData {
   generated_at: string;
-  forecast_period: string;
+  forecast_days: number;
   unit: string;
-  resorts: SnowfallResort[];
+  resorts: PrecipitationResort[];
 }
 
-export interface SnowfallResort {
+export interface PrecipitationResort {
   id: string;
   name: string;
   latitude: number;
   longitude: number;
-  snowfall_7day: number;
   region: string;
   country: string;
+  daily_forecasts: DailyForecast[];
+}
+
+export interface DailyForecast {
+  date: string;
+  rain_inches: number;
+  snow_inches: number;
+  weather_code: number;
 }

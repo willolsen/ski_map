@@ -11,7 +11,17 @@
       <header>
         <h1>Ski Resort Road Trip Planner</h1>
         <div id="controls">
-          <button id="toggleSnow">Hide Snowfall</button>
+          <div class="weather-controls">
+            <button id="togglePrecipitation">Hide Weather</button>
+            <div class="date-range-control">
+              <label>Forecast Range:</label>
+              <div id="dateRangeDisplay" class="date-display"></div>
+              <div class="slider-container">
+                <label>Start: <input type="range" id="startDaySlider" min="0" max="15" value="0" step="1"></label>
+                <label>End: <input type="range" id="endDaySlider" min="0" max="15" value="6" step="1"></label>
+              </div>
+            </div>
+          </div>
           <button id="clearRoutes">Clear Routes</button>
           <div id="routeInfo"></div>
         </div>

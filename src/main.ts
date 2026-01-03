@@ -2,6 +2,7 @@ import './style.css';
 import { skiResorts } from './resorts';
 import { SkiResort, RouteInfo, PrecipitationData } from './types';
 import precipitationData from '../snowfall_forecast.json';
+import mapConfig from '../map-config.json';
 
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
@@ -62,9 +63,9 @@ class SkiMapApp {
       throw new Error('Map element not found');
     }
 
-    // Center the map on North America (roughly central US)
+    // Initialize map centered on western North America ski areas
     this.map = new google.maps.Map(mapElement, {
-      center: { lat: 39.8283, lng: -98.5795 },
+      center: mapConfig.initialView.center,
       zoom: 5,
       mapTypeId: 'hybrid',
       mapTypeControl: true,
@@ -78,6 +79,13 @@ class SkiMapApp {
       ],
     });
 
+    // Fit map to western ski areas bounds
+    const bounds = new google.maps.LatLngBounds(
+      { lat: mapConfig.initialView.bounds.south, lng: mapConfig.initialView.bounds.west },
+      { lat: mapConfig.initialView.bounds.north, lng: mapConfig.initialView.bounds.east }
+    );
+    this.map.fitBounds(bounds);
+
     this.directionsService = new google.maps.DirectionsService();
   }
 
@@ -90,7 +98,7 @@ class SkiMapApp {
         icon: {
           path: google.maps.SymbolPath.CIRCLE,
           scale: 8,
-          fillColor: resort.pass === 'IKON' ? '#667eea' : '#f59e0b',
+          fillColor: resort.pass === 'IKON' ? '#667eea' : resort.pass === 'EPIC' ? '#16a34a' : '#f59e0b',
           fillOpacity: 1,
           strokeColor: '#ffffff',
           strokeWeight: 2,
@@ -182,7 +190,7 @@ class SkiMapApp {
         marker.setIcon({
           path: google.maps.SymbolPath.CIRCLE,
           scale: highlight ? 12 : 8,
-          fillColor: resort.pass === 'IKON' ? '#667eea' : '#f59e0b',
+          fillColor: resort.pass === 'IKON' ? '#667eea' : resort.pass === 'EPIC' ? '#16a34a' : '#f59e0b',
           fillOpacity: 1,
           strokeColor: highlight ? '#fbbf24' : '#ffffff',
           strokeWeight: highlight ? 3 : 2,

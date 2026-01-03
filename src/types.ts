@@ -5,7 +5,7 @@ export interface SkiResort {
     lat: number;
     lng: number;
   };
-  pass: 'IKON' | 'OTHER';
+  pass: 'IKON' | 'EPIC' | 'OTHER';
   region: string;
   country: string;
   accessType?: string;

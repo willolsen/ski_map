@@ -330,54 +330,77 @@ class SkiMapApp {
   }
 
   private initDateRangeSlider() {
-    const startSlider = document.getElementById('startDaySlider') as HTMLInputElement;
-    const endSlider = document.getElementById('endDaySlider') as HTMLInputElement;
-    const dateDisplay = document.getElementById('dateRangeDisplay');
+    const startDateInput = document.getElementById('startDate') as HTMLInputElement;
+    const endDateInput = document.getElementById('endDate') as HTMLInputElement;
 
-    if (!startSlider || !endSlider || !dateDisplay) {
-      console.error('Slider elements not found');
+    if (!startDateInput || !endDateInput) {
+      console.error('Date input elements not found');
       return;
     }
 
-    const maxDays = this.precipitationData.forecast_days - 1;
-    startSlider.max = maxDays.toString();
-    endSlider.max = maxDays.toString();
-    startSlider.value = this.startDay.toString();
-    endSlider.value = this.endDay.toString();
+    // Calculate min and max dates from forecast data
+    const baseDate = new Date(this.precipitationData.generated_at);
+    const minDate = new Date(baseDate);
+    const maxDate = new Date(baseDate);
+    maxDate.setDate(maxDate.getDate() + this.precipitationData.forecast_days - 1);
 
-    const updateDisplay = () => {
-      const startDate = new Date(this.precipitationData.generated_at);
-      const endDate = new Date(this.precipitationData.generated_at);
-      startDate.setDate(startDate.getDate() + this.startDay);
-      endDate.setDate(endDate.getDate() + this.endDay);
+    // Format dates as YYYY-MM-DD for input[type="date"]
+    const formatDateForInput = (d: Date) => d.toISOString().split('T')[0];
 
-      const formatDate = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-      dateDisplay.textContent = `${formatDate(startDate)} - ${formatDate(endDate)} (${this.endDay - this.startDay + 1} days)`;
+    // Set min/max bounds on inputs
+    startDateInput.min = formatDateForInput(minDate);
+    startDateInput.max = formatDateForInput(maxDate);
+    endDateInput.min = formatDateForInput(minDate);
+    endDateInput.max = formatDateForInput(maxDate);
+
+    // Set initial values
+    const initialStartDate = new Date(baseDate);
+    initialStartDate.setDate(initialStartDate.getDate() + this.startDay);
+    const initialEndDate = new Date(baseDate);
+    initialEndDate.setDate(initialEndDate.getDate() + this.endDay);
+
+    startDateInput.value = formatDateForInput(initialStartDate);
+    endDateInput.value = formatDateForInput(initialEndDate);
+
+    // Convert date to day offset (0-15)
+    const dateToOffset = (dateStr: string): number => {
+      const selectedDate = new Date(dateStr + 'T00:00:00');
+      const base = new Date(this.precipitationData.generated_at);
+      base.setHours(0, 0, 0, 0);
+      const diffTime = selectedDate.getTime() - base.getTime();
+      const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+      return Math.max(0, Math.min(diffDays, this.precipitationData.forecast_days - 1));
     };
 
-    startSlider.addEventListener('input', () => {
-      let start = parseInt(startSlider.value);
-      if (start > this.endDay) {
-        start = this.endDay;
-        startSlider.value = start.toString();
+    startDateInput.addEventListener('change', () => {
+      const startOffset = dateToOffset(startDateInput.value);
+
+      // Ensure end date is not before start date
+      if (this.endDay < startOffset) {
+        this.endDay = startOffset;
+        const newEndDate = new Date(baseDate);
+        newEndDate.setDate(newEndDate.getDate() + this.endDay);
+        endDateInput.value = formatDateForInput(newEndDate);
       }
-      this.startDay = start;
-      updateDisplay();
+
+      this.startDay = startOffset;
       this.updatePrecipitationOverlay();
     });
 
-    endSlider.addEventListener('input', () => {
-      let end = parseInt(endSlider.value);
-      if (end < this.startDay) {
-        end = this.startDay;
-        endSlider.value = end.toString();
+    endDateInput.addEventListener('change', () => {
+      const endOffset = dateToOffset(endDateInput.value);
+
+      // Ensure start date is not after end date
+      if (this.startDay > endOffset) {
+        this.startDay = endOffset;
+        const newStartDate = new Date(baseDate);
+        newStartDate.setDate(newStartDate.getDate() + this.startDay);
+        startDateInput.value = formatDateForInput(newStartDate);
       }
-      this.endDay = end;
-      updateDisplay();
+
+      this.endDay = endOffset;
       this.updatePrecipitationOverlay();
     });
-
-    updateDisplay();
   }
 
   private togglePrecipitationOverlay(show: boolean) {

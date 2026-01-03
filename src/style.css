@@ -45,6 +45,10 @@ header h1 {
   border-radius: 8px;
 }
 
+.weather-controls.hidden {
+  display: none;
+}
+
 .date-range-control {
   display: flex;
   flex-direction: column;

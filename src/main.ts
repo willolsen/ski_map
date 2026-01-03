@@ -5,6 +5,9 @@ import precipitationData from '../snowfall_forecast.json';
 
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
+// Feature toggle for weather functionality
+const ENABLE_WEATHER_FEATURES = false;
+
 class SkiMapApp {
   private map!: google.maps.Map;
   private markers: Map<string, google.maps.Marker> = new Map();
@@ -22,9 +25,17 @@ class SkiMapApp {
   async init() {
     await this.loadGoogleMapsAPI();
     this.initMap();
-    this.initPrecipitationOverlay();
+    if (ENABLE_WEATHER_FEATURES) {
+      this.initPrecipitationOverlay();
+      this.initDateRangeSlider();
+    } else {
+      // Hide weather UI when feature is disabled
+      const weatherControls = document.querySelector('.weather-controls');
+      if (weatherControls) {
+        weatherControls.classList.add('hidden');
+      }
+    }
     this.initResortMarkers();
-    this.initDateRangeSlider();
     this.setupEventListeners();
   }
 
@@ -103,23 +114,26 @@ class SkiMapApp {
   }
 
   private createInfoWindowContent(resort: SkiResort): string {
-    // Find precipitation data for this resort
-    const precipResort = this.precipitationData.resorts.find(r => r.id === resort.id);
-
     let precipInfo = '';
-    if (precipResort) {
-      const selectedDays = precipResort.daily_forecasts.slice(this.startDay, this.endDay + 1);
-      const totalSnow = selectedDays.reduce((sum, day) => sum + day.snow_inches, 0);
-      const totalRain = selectedDays.reduce((sum, day) => sum + day.rain_inches, 0);
-      const dayCount = this.endDay - this.startDay + 1;
 
-      precipInfo = `
-        <p style="font-size: 0.95em; margin: 8px 0;">
-          <span style="color: #ffffff; background: #4169E1; padding: 2px 6px; border-radius: 3px; font-weight: 600;">❄️ ${totalSnow.toFixed(1)}"</span>
-          <span style="color: #333; background: #87CEEB; padding: 2px 6px; border-radius: 3px; margin-left: 4px; font-weight: 600;">🌧️ ${totalRain.toFixed(1)}"</span>
-        </p>
-        <p style="font-size: 0.85em; color: #666;">${dayCount}-day forecast</p>
-      `;
+    // Only show precipitation data if weather features are enabled
+    if (ENABLE_WEATHER_FEATURES) {
+      const precipResort = this.precipitationData.resorts.find(r => r.id === resort.id);
+
+      if (precipResort) {
+        const selectedDays = precipResort.daily_forecasts.slice(this.startDay, this.endDay + 1);
+        const totalSnow = selectedDays.reduce((sum, day) => sum + day.snow_inches, 0);
+        const totalRain = selectedDays.reduce((sum, day) => sum + day.rain_inches, 0);
+        const dayCount = this.endDay - this.startDay + 1;
+
+        precipInfo = `
+          <p style="font-size: 0.95em; margin: 8px 0;">
+            <span style="color: #ffffff; background: #4169E1; padding: 2px 6px; border-radius: 3px; font-weight: 600;">❄️ ${totalSnow.toFixed(1)}"</span>
+            <span style="color: #333; background: #87CEEB; padding: 2px 6px; border-radius: 3px; margin-left: 4px; font-weight: 600;">🌧️ ${totalRain.toFixed(1)}"</span>
+          </p>
+          <p style="font-size: 0.85em; color: #666;">${dayCount}-day forecast</p>
+        `;
+      }
     }
 
     return `

@@ -1438,10 +1438,10 @@
       "city": "Naches",
       "country": "United States",
       "region": "Washington",
-      "id": "white-pass",
-      "latitude": 46.0014917,
-      "longitude": -102.6444822,
-      "formatted_address": "US-12, United States",
+      "id": "white-pass-wa",
+      "latitude": 46.6345,
+      "longitude": -121.3858,
+      "formatted_address": "48935 US Highway 12, Naches, WA 98937, USA",
       "pass": "INDEPENDENT"
     },
     {

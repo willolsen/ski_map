@@ -12,7 +12,8 @@
         "access_type": "Unlimited",
         "latitude": 39.1903602,
         "longitude": -106.947666,
-        "formatted_address": "Snowmass Village, CO 81615, USA"
+        "formatted_address": "Snowmass Village, CO 81615, USA",
+        "id": "aspen-snowmass"
       },
       {
         "name": "Steamboat",
@@ -23,7 +24,8 @@
         "access_type": "Unlimited",
         "latitude": 40.4570979,
         "longitude": -106.8044718,
-        "formatted_address": "2305 Mt Werner Cir, Steamboat Springs, CO 80487, USA"
+        "formatted_address": "2305 Mt Werner Cir, Steamboat Springs, CO 80487, USA",
+        "id": "steamboat"
       },
       {
         "name": "Winter Park Resort",
@@ -34,7 +36,8 @@
         "access_type": "Unlimited",
         "latitude": 39.8868391,
         "longitude": -105.762488,
-        "formatted_address": "85 Parsenn Rd, Winter Park, CO 80482, USA"
+        "formatted_address": "85 Parsenn Rd, Winter Park, CO 80482, USA",
+        "id": "winter-park-resort"
       },
       {
         "name": "Copper Mountain",
@@ -45,7 +48,8 @@
         "access_type": "Unlimited",
         "latitude": 39.5011318,
         "longitude": -106.1545788,
-        "formatted_address": "209 Ten Mile Cir, Frisco, CO 80443, USA"
+        "formatted_address": "209 Ten Mile Cir, Frisco, CO 80443, USA",
+        "id": "copper-mountain"
       },
       {
         "name": "Eldora Mountain Resort",
@@ -56,7 +60,8 @@
         "access_type": "Unlimited",
         "latitude": 39.9613759,
         "longitude": -105.5108312,
-        "formatted_address": "Nederland, CO 80466, USA"
+        "formatted_address": "Nederland, CO 80466, USA",
+        "id": "eldora-mountain-resort"
       },
       {
         "name": "Arapahoe Basin",
@@ -67,7 +72,8 @@
         "access_type": "Unlimited (Full Pass), 5 days (Base Pass)",
         "latitude": 39.6302643,
         "longitude": -106.0433518,
-        "formatted_address": "Dillon, CO, USA"
+        "formatted_address": "Dillon, CO, USA",
+        "id": "arapahoe-basin"
       },
       {
         "name": "Palisades Tahoe",
@@ -78,7 +84,8 @@
         "access_type": "Unlimited",
         "latitude": 39.196849,
         "longitude": -120.2358066,
-        "formatted_address": "1960 Olympic Vly Rd, Olympic Valley, CA 96146, USA"
+        "formatted_address": "1960 Olympic Vly Rd, Olympic Valley, CA 96146, USA",
+        "id": "palisades-tahoe"
       },
       {
         "name": "Mammoth Mountain",
@@ -89,7 +96,8 @@
         "access_type": "Unlimited",
         "latitude": 37.6511273,
         "longitude": -119.0267624,
-        "formatted_address": "10001 Minaret Rd, Mammoth Lakes, CA 93546, USA"
+        "formatted_address": "10001 Minaret Rd, Mammoth Lakes, CA 93546, USA",
+        "id": "mammoth-mountain"
       },
       {
         "name": "June Mountain",
@@ -100,7 +108,8 @@
         "access_type": "Unlimited",
         "latitude": 37.648546,
         "longitude": -118.972079,
-        "formatted_address": "Mammoth Lakes, CA 93546, USA"
+        "formatted_address": "Mammoth Lakes, CA 93546, USA",
+        "id": "june-mountain"
       },
       {
         "name": "Big Bear Mountain Resort",
@@ -111,7 +120,8 @@
         "access_type": "Unlimited",
         "latitude": 34.2438963,
         "longitude": -116.9114215,
-        "formatted_address": "Big Bear Lake, CA, USA"
+        "formatted_address": "Big Bear Lake, CA, USA",
+        "id": "big-bear-mountain-resort"
       },
       {
         "name": "Alta Ski Area",
@@ -122,7 +132,8 @@
         "access_type": "7 days",
         "latitude": 40.5892469,
         "longitude": -111.6416192,
-        "formatted_address": "10010 Little Cottonwood Rd, Alta, UT 84092, USA"
+        "formatted_address": "10010 Little Cottonwood Rd, Alta, UT 84092, USA",
+        "id": "alta-ski-area"
       },
       {
         "name": "Snowbird",
@@ -133,7 +144,8 @@
         "access_type": "7 days",
         "latitude": 40.5724796,
         "longitude": -111.7732325,
-        "formatted_address": "Little Cottonwood Canyon, Utah 84092, USA"
+        "formatted_address": "Little Cottonwood Canyon, Utah 84092, USA",
+        "id": "snowbird"
       },
       {
         "name": "Deer Valley Resort",
@@ -144,7 +156,8 @@
         "access_type": "7 days",
         "latitude": 40.62257899999999,
         "longitude": -111.4850846,
-        "formatted_address": "2250 Deer Valley Dr S, Park City, UT 84060, USA"
+        "formatted_address": "2250 Deer Valley Dr S, Park City, UT 84060, USA",
+        "id": "deer-valley-resort"
       },
       {
         "name": "Solitude Mountain Resort",
@@ -155,7 +168,8 @@
         "access_type": "Unlimited",
         "latitude": 40.637269,
         "longitude": -111.6330126,
-        "formatted_address": "Big Cottonwood Canyon, Brighton, UT 84121, USA"
+        "formatted_address": "Big Cottonwood Canyon, Brighton, UT 84121, USA",
+        "id": "solitude-mountain-resort"
       },
       {
         "name": "Brighton Resort",
@@ -166,7 +180,8 @@
         "access_type": "7 days",
         "latitude": 40.637269,
         "longitude": -111.6330126,
-        "formatted_address": "Big Cottonwood Canyon, Brighton, UT 84121, USA"
+        "formatted_address": "Big Cottonwood Canyon, Brighton, UT 84121, USA",
+        "id": "brighton-resort"
       },
       {
         "name": "Snowbasin",
@@ -177,7 +192,8 @@
         "access_type": "7 days",
         "latitude": 41.2607744,
         "longitude": -111.7699379,
-        "formatted_address": "Huntsville, UT 84317, USA"
+        "formatted_address": "Huntsville, UT 84317, USA",
+        "id": "snowbasin"
       },
       {
         "name": "Jackson Hole Mountain Resort",
@@ -188,7 +204,8 @@
         "access_type": "7 days",
         "latitude": 43.5876318,
         "longitude": -110.827952,
-        "formatted_address": "3395 Cody Ln, Teton Village, WY 83025, USA"
+        "formatted_address": "3395 Cody Ln, Teton Village, WY 83025, USA",
+        "id": "jackson-hole-mountain-resort"
       },
       {
         "name": "Big Sky Resort",
@@ -199,7 +216,8 @@
         "access_type": "7 days",
         "latitude": 45.284358,
         "longitude": -111.4008347,
-        "formatted_address": "50 Big Sky Resort Rd, Big Sky, MT 59716, USA"
+        "formatted_address": "50 Big Sky Resort Rd, Big Sky, MT 59716, USA",
+        "id": "big-sky-resort"
       },
       {
         "name": "Crystal Mountain",
@@ -210,7 +228,8 @@
         "access_type": "Unlimited",
         "latitude": 46.9352963,
         "longitude": -121.4747533,
-        "formatted_address": "Chinook Express, 33914 Crystal Mountain Blvd, Enumclaw, WA 98022, USA"
+        "formatted_address": "Chinook Express, 33914 Crystal Mountain Blvd, Enumclaw, WA 98022, USA",
+        "id": "crystal-mountain"
       },
       {
         "name": "The Summit at Snoqualmie",
@@ -221,7 +240,8 @@
         "access_type": "7 days",
         "latitude": 47.3923346,
         "longitude": -121.4000942,
-        "formatted_address": "Snoqualmie Pass, WA, USA"
+        "formatted_address": "Snoqualmie Pass, WA, USA",
+        "id": "the-summit-at-snoqualmie"
       },
       {
         "name": "Mt. Bachelor",
@@ -232,7 +252,8 @@
         "access_type": "7 days",
         "latitude": 44.0581728,
         "longitude": -121.3153096,
-        "formatted_address": "Bend, OR, USA"
+        "formatted_address": "Bend, OR, USA",
+        "id": "mt-bachelor"
       },
       {
         "name": "Sun Valley",
@@ -243,7 +264,8 @@
         "access_type": "7 days",
         "latitude": 43.6807402,
         "longitude": -114.3636619,
-        "formatted_address": "Ketchum, ID, USA"
+        "formatted_address": "Ketchum, ID, USA",
+        "id": "sun-valley"
       },
       {
         "name": "Schweitzer",
@@ -254,7 +276,8 @@
         "access_type": "7 days",
         "latitude": 48.276577,
         "longitude": -116.553465,
-        "formatted_address": "Sandpoint, ID 83864, USA"
+        "formatted_address": "Sandpoint, ID 83864, USA",
+        "id": "schweitzer"
       },
       {
         "name": "Taos Ski Valley",
@@ -265,7 +288,8 @@
         "access_type": "7 days",
         "latitude": 36.5959999,
         "longitude": -105.4545,
-        "formatted_address": "Taos Ski Valley, NM 87525, USA"
+        "formatted_address": "Taos Ski Valley, NM 87525, USA",
+        "id": "taos-ski-valley"
       },
       {
         "name": "Stratton",
@@ -276,7 +300,8 @@
         "access_type": "Unlimited",
         "latitude": 43.1138414,
         "longitude": -72.905452,
-        "formatted_address": "Stratton Mountain, Winhall, VT, USA"
+        "formatted_address": "Stratton Mountain, Winhall, VT, USA",
+        "id": "stratton"
       },
       {
         "name": "Sugarbush Resort",
@@ -287,7 +312,8 @@
         "access_type": "Unlimited",
         "latitude": 44.112005,
         "longitude": -72.85594739999999,
-        "formatted_address": "Warren, VT, USA"
+        "formatted_address": "Warren, VT, USA",
+        "id": "sugarbush-resort"
       },
       {
         "name": "Killington Resort",
@@ -298,7 +324,8 @@
         "access_type": "7 days",
         "latitude": 43.6775677,
         "longitude": -72.77982469999999,
-        "formatted_address": "Killington, VT, USA"
+        "formatted_address": "Killington, VT, USA",
+        "id": "killington-resort"
       },
       {
         "name": "Sunday River",
@@ -309,7 +336,8 @@
         "access_type": "7 days",
         "latitude": 44.4884245,
         "longitude": -70.78857649999999,
-        "formatted_address": "Newry, ME 04261, USA"
+        "formatted_address": "Newry, ME 04261, USA",
+        "id": "sunday-river"
       },
       {
         "name": "Sugarloaf",
@@ -320,7 +348,8 @@
         "access_type": "7 days",
         "latitude": 45.0736009,
         "longitude": -70.26168729999999,
-        "formatted_address": "Carrabassett Valley, ME 04947, USA"
+        "formatted_address": "Carrabassett Valley, ME 04947, USA",
+        "id": "sugarloaf"
       },
       {
         "name": "Loon Mountain",
@@ -331,7 +360,8 @@
         "access_type": "7 days",
         "latitude": 44.0444001,
         "longitude": -71.66844789999999,
-        "formatted_address": "Lincoln, NH, USA"
+        "formatted_address": "Lincoln, NH, USA",
+        "id": "loon-mountain"
       },
       {
         "name": "Snowshoe",
@@ -342,7 +372,8 @@
         "access_type": "Unlimited",
         "latitude": 38.4132303,
         "longitude": -79.9975177,
-        "formatted_address": "Snowshoe, WV 26209, USA"
+        "formatted_address": "Snowshoe, WV 26209, USA",
+        "id": "snowshoe"
       },
       {
         "name": "Boyne Highlands",
@@ -353,7 +384,8 @@
         "access_type": "Bonus (2 days)",
         "latitude": 45.43167589999999,
         "longitude": -84.9919992,
-        "formatted_address": "Harbor Springs, MI 49740, USA"
+        "formatted_address": "Harbor Springs, MI 49740, USA",
+        "id": "boyne-highlands"
       },
       {
         "name": "Boyne Mountain",
@@ -364,7 +396,8 @@
         "access_type": "Bonus (2 days)",
         "latitude": 45.168065,
         "longitude": -84.9161574,
-        "formatted_address": "Boyne Falls, MI, USA"
+        "formatted_address": "Boyne Falls, MI, USA",
+        "id": "boyne-mountain"
       }
     ],
     "canada": [
@@ -377,7 +410,8 @@
         "access_type": "Unlimited",
         "latitude": 46.2098058,
         "longitude": -74.5853144,
-        "formatted_address": "1000 Chem. des Voyageurs, Mont-Tremblant, QC J8E 1T1, Canada"
+        "formatted_address": "1000 Chem. des Voyageurs, Mont-Tremblant, QC J8E 1T1, Canada",
+        "id": "tremblant"
       },
       {
         "name": "Le Massif de Charlevoix",
@@ -388,7 +422,8 @@
         "access_type": "7 days",
         "latitude": 47.30774299999999,
         "longitude": -70.56810899999999,
-        "formatted_address": "Petite-Rivière-Saint-François, QC G0A 2L0, Canada"
+        "formatted_address": "Petite-Rivière-Saint-François, QC G0A 2L0, Canada",
+        "id": "le-massif-de-charlevoix"
       },
       {
         "name": "Blue Mountain",
@@ -399,7 +434,8 @@
         "access_type": "Unlimited",
         "latitude": 44.5458789,
         "longitude": -80.46168279999999,
-        "formatted_address": "The Blue Mountains, ON, Canada"
+        "formatted_address": "The Blue Mountains, ON, Canada",
+        "id": "blue-mountain"
       },
       {
         "name": "Banff Sunshine",
@@ -410,7 +446,8 @@
         "access_type": "7 days (SkiBig3)",
         "latitude": 51.1784304,
         "longitude": -115.5707903,
-        "formatted_address": "Banff, AB, Canada"
+        "formatted_address": "Banff, AB, Canada",
+        "id": "banff-sunshine"
       },
       {
         "name": "Lake Louise Ski Resort",
@@ -421,7 +458,8 @@
         "access_type": "7 days (SkiBig3)",
         "latitude": 51.4253705,
         "longitude": -116.1772552,
-        "formatted_address": "Lake Louise, AB T0L 1E0, Canada"
+        "formatted_address": "Lake Louise, AB T0L 1E0, Canada",
+        "id": "lake-louise-ski-resort"
       },
       {
         "name": "Mt. Norquay",
@@ -432,7 +470,8 @@
         "access_type": "7 days (SkiBig3)",
         "latitude": 51.1784304,
         "longitude": -115.5707903,
-        "formatted_address": "Banff, AB, Canada"
+        "formatted_address": "Banff, AB, Canada",
+        "id": "mt-norquay"
       },
       {
         "name": "Revelstoke Mountain Resort",
@@ -443,7 +482,8 @@
         "access_type": "7 days",
         "latitude": 50.95838579999999,
         "longitude": -118.163078,
-        "formatted_address": "2950 Camozzi Rd, Revelstoke, BC V0E 2S1, Canada"
+        "formatted_address": "2950 Camozzi Rd, Revelstoke, BC V0E 2S1, Canada",
+        "id": "revelstoke-mountain-resort"
       },
       {
         "name": "RED Mountain",
@@ -454,7 +494,8 @@
         "access_type": "7 days",
         "latitude": 49.0781415,
         "longitude": -117.8000037,
-        "formatted_address": "Rossland, BC V0G 1Y0, Canada"
+        "formatted_address": "Rossland, BC V0G 1Y0, Canada",
+        "id": "red-mountain"
       },
       {
         "name": "Cypress Mountain",
@@ -465,7 +506,8 @@
         "access_type": "7 days",
         "latitude": 49.3286251,
         "longitude": -123.1601981,
-        "formatted_address": "West Vancouver, BC, Canada"
+        "formatted_address": "West Vancouver, BC, Canada",
+        "id": "cypress-mountain"
       },
       {
         "name": "Panorama Mountain Resort",
@@ -476,7 +518,8 @@
         "access_type": "7 days",
         "latitude": 50.45837059999999,
         "longitude": -116.238466,
-        "formatted_address": "Panorama, BC V0A 1T0, Canada"
+        "formatted_address": "Panorama, BC V0A 1T0, Canada",
+        "id": "panorama-mountain-resort"
       },
       {
         "name": "Sun Peaks Resort",
@@ -487,7 +530,8 @@
         "access_type": "7 days",
         "latitude": 50.8815578,
         "longitude": -119.8972041,
-        "formatted_address": "Sun Peaks, BC V0E, Canada"
+        "formatted_address": "Sun Peaks, BC V0E, Canada",
+        "id": "sun-peaks-resort"
       },
       {
         "name": "Grouse Mountain",
@@ -498,7 +542,8 @@
         "access_type": "Bonus (2 days)",
         "latitude": 49.3199816,
         "longitude": -123.0724139,
-        "formatted_address": "North Vancouver, BC, Canada"
+        "formatted_address": "North Vancouver, BC, Canada",
+        "id": "grouse-mountain"
       },
       {
         "name": "SilverStar Mountain Resort",
@@ -509,7 +554,8 @@
         "access_type": "Bonus (2 days)",
         "latitude": 50.2670137,
         "longitude": -119.2720107,
-        "formatted_address": "Vernon, BC, Canada"
+        "formatted_address": "Vernon, BC, Canada",
+        "id": "silverstar-mountain-resort"
       }
     ]
   }

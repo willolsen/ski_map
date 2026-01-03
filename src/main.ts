@@ -46,7 +46,7 @@ class SkiMapApp {
     this.map = new google.maps.Map(mapElement, {
       center: { lat: 39.8283, lng: -98.5795 },
       zoom: 5,
-      mapTypeId: 'terrain',
+      mapTypeId: 'hybrid',
       mapTypeControl: true,
       streetViewControl: false,
       styles: [

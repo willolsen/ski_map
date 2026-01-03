@@ -8,6 +8,9 @@ export interface SkiResort {
   pass: 'IKON' | 'OTHER';
   state: string;
   country: string;
+  accessType?: string;
+  address?: string;
+  city?: string;
 }
 
 export interface RouteInfo {

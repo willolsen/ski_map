@@ -95,6 +95,7 @@ class SkiMapApp {
       <div class="info-window">
         <h3>${resort.name}</h3>
         <p>${resort.state}, ${resort.country}</p>
+        ${resort.accessType ? `<p style="font-size: 0.9em; color: #666;">Access: ${resort.accessType}</p>` : ''}
         <span class="pass-badge">${resort.pass} PASS</span>
       </div>
     `;

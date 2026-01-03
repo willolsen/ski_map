@@ -1,0 +1,378 @@
+{
+  "ikon_pass_resorts_north_america": {
+    "data_source": "Compiled from official IKON Pass website and resort websites",
+    "last_updated": "2026-01-02",
+    "united_states": [
+      {
+        "name": "Aspen Snowmass",
+        "address": "Snowmass Village, CO 81615",
+        "city": "Snowmass Village",
+        "state": "Colorado",
+        "country": "United States",
+        "access_type": "Unlimited"
+      },
+      {
+        "name": "Steamboat",
+        "address": "2305 Mt Werner Cir, Steamboat Springs, CO 80487",
+        "city": "Steamboat Springs",
+        "state": "Colorado",
+        "country": "United States",
+        "access_type": "Unlimited"
+      },
+      {
+        "name": "Winter Park Resort",
+        "address": "85 Parsenn Rd, Winter Park, CO 80482",
+        "city": "Winter Park",
+        "state": "Colorado",
+        "country": "United States",
+        "access_type": "Unlimited"
+      },
+      {
+        "name": "Copper Mountain",
+        "address": "209 Ten Mile Circle, Copper Mountain, CO 80443",
+        "city": "Copper Mountain",
+        "state": "Colorado",
+        "country": "United States",
+        "access_type": "Unlimited"
+      },
+      {
+        "name": "Eldora Mountain Resort",
+        "address": "Nederland, CO 80466",
+        "city": "Nederland",
+        "state": "Colorado",
+        "country": "United States",
+        "access_type": "Unlimited"
+      },
+      {
+        "name": "Arapahoe Basin",
+        "address": "Dillon, CO",
+        "city": "Dillon",
+        "state": "Colorado",
+        "country": "United States",
+        "access_type": "Unlimited (Full Pass), 5 days (Base Pass)"
+      },
+      {
+        "name": "Palisades Tahoe",
+        "address": "1960 Olympic Valley Rd, Olympic Valley, CA 96146",
+        "city": "Olympic Valley",
+        "state": "California",
+        "country": "United States",
+        "access_type": "Unlimited"
+      },
+      {
+        "name": "Mammoth Mountain",
+        "address": "10001 Minaret Rd, Mammoth Lakes, CA 93546",
+        "city": "Mammoth Lakes",
+        "state": "California",
+        "country": "United States",
+        "access_type": "Unlimited"
+      },
+      {
+        "name": "June Mountain",
+        "address": "Mammoth Lakes, CA",
+        "city": "Mammoth Lakes",
+        "state": "California",
+        "country": "United States",
+        "access_type": "Unlimited"
+      },
+      {
+        "name": "Big Bear Mountain Resort",
+        "address": "Big Bear Lake, CA",
+        "city": "Big Bear Lake",
+        "state": "California",
+        "country": "United States",
+        "access_type": "Unlimited"
+      },
+      {
+        "name": "Alta Ski Area",
+        "address": "10010 Little Cottonwood Rd, Alta, UT 84092",
+        "city": "Alta",
+        "state": "Utah",
+        "country": "United States",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Snowbird",
+        "address": "Little Cottonwood Canyon, UT",
+        "city": "Snowbird",
+        "state": "Utah",
+        "country": "United States",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Deer Valley Resort",
+        "address": "2250 Deer Valley Dr S, Park City, UT 84060",
+        "city": "Park City",
+        "state": "Utah",
+        "country": "United States",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Solitude Mountain Resort",
+        "address": "Big Cottonwood Canyon, UT",
+        "city": "Solitude",
+        "state": "Utah",
+        "country": "United States",
+        "access_type": "Unlimited"
+      },
+      {
+        "name": "Brighton Resort",
+        "address": "Big Cottonwood Canyon, UT",
+        "city": "Brighton",
+        "state": "Utah",
+        "country": "United States",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Snowbasin",
+        "address": "Huntsville, UT",
+        "city": "Huntsville",
+        "state": "Utah",
+        "country": "United States",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Jackson Hole Mountain Resort",
+        "address": "3395 Cody Ln, Teton Village, WY 83025",
+        "city": "Teton Village",
+        "state": "Wyoming",
+        "country": "United States",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Big Sky Resort",
+        "address": "50 Big Sky Resort Rd, Big Sky, MT 59716",
+        "city": "Big Sky",
+        "state": "Montana",
+        "country": "United States",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Crystal Mountain",
+        "address": "33914 Crystal Mountain Blvd, Crystal Mountain, WA 98022",
+        "city": "Crystal Mountain",
+        "state": "Washington",
+        "country": "United States",
+        "access_type": "Unlimited"
+      },
+      {
+        "name": "The Summit at Snoqualmie",
+        "address": "Snoqualmie Pass, WA",
+        "city": "Snoqualmie Pass",
+        "state": "Washington",
+        "country": "United States",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Mt. Bachelor",
+        "address": "Bend, OR",
+        "city": "Bend",
+        "state": "Oregon",
+        "country": "United States",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Sun Valley",
+        "address": "Ketchum, ID",
+        "city": "Ketchum",
+        "state": "Idaho",
+        "country": "United States",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Schweitzer",
+        "address": "Sandpoint, ID",
+        "city": "Sandpoint",
+        "state": "Idaho",
+        "country": "United States",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Taos Ski Valley",
+        "address": "P.O. Box 91, Taos Ski Valley, NM 87525",
+        "city": "Taos Ski Valley",
+        "state": "New Mexico",
+        "country": "United States",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Stratton",
+        "address": "Stratton Mountain, VT",
+        "city": "Stratton Mountain",
+        "state": "Vermont",
+        "country": "United States",
+        "access_type": "Unlimited"
+      },
+      {
+        "name": "Sugarbush Resort",
+        "address": "Warren, VT",
+        "city": "Warren",
+        "state": "Vermont",
+        "country": "United States",
+        "access_type": "Unlimited"
+      },
+      {
+        "name": "Killington Resort",
+        "address": "Killington, VT",
+        "city": "Killington",
+        "state": "Vermont",
+        "country": "United States",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Sunday River",
+        "address": "Newry, ME",
+        "city": "Newry",
+        "state": "Maine",
+        "country": "United States",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Sugarloaf",
+        "address": "Carrabassett Valley, ME",
+        "city": "Carrabassett Valley",
+        "state": "Maine",
+        "country": "United States",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Loon Mountain",
+        "address": "Lincoln, NH",
+        "city": "Lincoln",
+        "state": "New Hampshire",
+        "country": "United States",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Snowshoe",
+        "address": "Snowshoe, WV",
+        "city": "Snowshoe",
+        "state": "West Virginia",
+        "country": "United States",
+        "access_type": "Unlimited"
+      },
+      {
+        "name": "Boyne Highlands",
+        "address": "Harbor Springs, MI",
+        "city": "Harbor Springs",
+        "state": "Michigan",
+        "country": "United States",
+        "access_type": "Bonus (2 days)"
+      },
+      {
+        "name": "Boyne Mountain",
+        "address": "Boyne Falls, MI",
+        "city": "Boyne Falls",
+        "state": "Michigan",
+        "country": "United States",
+        "access_type": "Bonus (2 days)"
+      }
+    ],
+    "canada": [
+      {
+        "name": "Tremblant",
+        "address": "1000 Chemin des Voyageurs, Mont-Tremblant, QC J8E 1T1",
+        "city": "Mont-Tremblant",
+        "province": "Quebec",
+        "country": "Canada",
+        "access_type": "Unlimited"
+      },
+      {
+        "name": "Le Massif de Charlevoix",
+        "address": "Petite-Rivière-Saint-François, QC",
+        "city": "Petite-Rivière-Saint-François",
+        "province": "Quebec",
+        "country": "Canada",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Blue Mountain",
+        "address": "Blue Mountains, ON",
+        "city": "Blue Mountains",
+        "province": "Ontario",
+        "country": "Canada",
+        "access_type": "Unlimited"
+      },
+      {
+        "name": "Banff Sunshine",
+        "address": "Box 1510, Banff, AB T1L 1J5",
+        "city": "Banff",
+        "province": "Alberta",
+        "country": "Canada",
+        "access_type": "7 days (SkiBig3)"
+      },
+      {
+        "name": "Lake Louise Ski Resort",
+        "address": "Lake Louise, AB T0L 1E0",
+        "city": "Lake Louise",
+        "province": "Alberta",
+        "country": "Canada",
+        "access_type": "7 days (SkiBig3)"
+      },
+      {
+        "name": "Mt. Norquay",
+        "address": "Banff, AB",
+        "city": "Banff",
+        "province": "Alberta",
+        "country": "Canada",
+        "access_type": "7 days (SkiBig3)"
+      },
+      {
+        "name": "Revelstoke Mountain Resort",
+        "address": "2950 Camozzi Rd, Revelstoke, BC V0E 2S0",
+        "city": "Revelstoke",
+        "province": "British Columbia",
+        "country": "Canada",
+        "access_type": "7 days"
+      },
+      {
+        "name": "RED Mountain",
+        "address": "Rossland, BC",
+        "city": "Rossland",
+        "province": "British Columbia",
+        "country": "Canada",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Cypress Mountain",
+        "address": "West Vancouver, BC",
+        "city": "West Vancouver",
+        "province": "British Columbia",
+        "country": "Canada",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Panorama Mountain Resort",
+        "address": "Panorama, BC",
+        "city": "Panorama",
+        "province": "British Columbia",
+        "country": "Canada",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Sun Peaks Resort",
+        "address": "Sun Peaks, BC V0E 5N0",
+        "city": "Sun Peaks",
+        "province": "British Columbia",
+        "country": "Canada",
+        "access_type": "7 days"
+      },
+      {
+        "name": "Grouse Mountain",
+        "address": "North Vancouver, BC",
+        "city": "North Vancouver",
+        "province": "British Columbia",
+        "country": "Canada",
+        "access_type": "Bonus (2 days)"
+      },
+      {
+        "name": "SilverStar Mountain Resort",
+        "address": "Vernon, BC",
+        "city": "Vernon",
+        "province": "British Columbia",
+        "country": "Canada",
+        "access_type": "Bonus (2 days)"
+      }
+    ]
+  }
+}

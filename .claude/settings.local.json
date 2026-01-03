@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:www.ikonpass.com)",
+      "WebFetch(domain:www.undercovertourist.com)",
+      "Bash(node tools/test-geocoder.js:*)",
+      "Bash(npm run dev:*)"
+    ]
+  }
+}

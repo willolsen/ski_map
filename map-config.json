@@ -1,16 +1,16 @@
 {
   "initialView": {
     "center": {
-      "lat": 42.8346334,
+      "lat": 43.52390405,
       "lng": -110.8761035
     },
     "bounds": {
-      "north": 51.4253705,
+      "north": 52.80391179999999,
       "south": 34.2438963,
       "east": -98.3227076,
       "west": -123.4294994
     },
     "description": "Western North America ski areas",
-    "resortCount": 84
+    "resortCount": 88
   }
 }

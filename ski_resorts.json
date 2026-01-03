@@ -1635,6 +1635,66 @@
       "longitude": -113.9440351,
       "formatted_address": "Pincher Creek, AB T0K 1W0, Canada",
       "pass": "INDEPENDENT"
+    },
+    {
+      "name": "Marmot Basin",
+      "address": "1 Marmot Road, Jasper, AB T0E 1E0",
+      "city": "Jasper",
+      "country": "Canada",
+      "region": "Alberta",
+      "id": "marmot-basin",
+      "latitude": 52.80391179999999,
+      "longitude": -118.0905496,
+      "formatted_address": "P4, 1 Marmot Rd, Jasper, AB T0E 1E0, Canada",
+      "pass": "INDEPENDENT"
+    },
+    {
+      "name": "Bridger Bowl",
+      "address": "15795 Bridger Canyon Road, Bozeman, MT 59715",
+      "city": "Bozeman",
+      "country": "United States",
+      "region": "Montana",
+      "id": "bridger-bowl",
+      "latitude": 45.8176261,
+      "longitude": -110.897566,
+      "formatted_address": "15795 Bridger Canyon Rd, Bozeman, MT 59715, USA",
+      "pass": "INDEPENDENT"
+    },
+    {
+      "name": "Brian Head",
+      "address": "329 South Highway 143, Brian Head, UT 84719",
+      "city": "Brian Head",
+      "country": "United States",
+      "region": "Utah",
+      "id": "brian-head",
+      "latitude": 37.6926111,
+      "longitude": -112.8476104,
+      "formatted_address": "329 UT-143, Brian Head, UT 84719, USA",
+      "pass": "INDEPENDENT"
+    },
+    {
+      "name": "Alyeska Resort",
+      "address": "1000 Arlberg Avenue, Girdwood, AK 99587",
+      "city": "Girdwood",
+      "country": "United States",
+      "region": "Alaska",
+      "id": "alyeska-resort",
+      "latitude": 60.97049509999999,
+      "longitude": -149.0982566,
+      "formatted_address": "1000 Arlberg Ave, Girdwood, AK 99587, USA",
+      "pass": "INDEPENDENT"
+    },
+    {
+      "name": "Mt. Shasta Ski Park",
+      "address": "4500 Ski Park Hwy, McCloud, CA 96057",
+      "city": "McCloud",
+      "country": "United States",
+      "region": "California",
+      "id": "mt-shasta-ski-park",
+      "latitude": 41.32104,
+      "longitude": -122.2027062,
+      "formatted_address": "4500 Ski Park Hwy, McCloud, CA 96057, USA",
+      "pass": "INDEPENDENT"
     }
   ]
 }

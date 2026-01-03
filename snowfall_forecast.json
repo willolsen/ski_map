@@ -1,0 +1,421 @@
+{
+  "generated_at": "2026-01-03T06:44:17.764Z",
+  "forecast_period": "7-day cumulative",
+  "unit": "inches",
+  "resorts": [
+    {
+      "id": "aspen-snowmass",
+      "name": "Aspen Snowmass",
+      "latitude": 39.1903602,
+      "longitude": -106.947666,
+      "snowfall_7day": 1.8,
+      "region": "Colorado",
+      "country": "United States"
+    },
+    {
+      "id": "steamboat",
+      "name": "Steamboat",
+      "latitude": 40.4570979,
+      "longitude": -106.8044718,
+      "snowfall_7day": 1.5,
+      "region": "Colorado",
+      "country": "United States"
+    },
+    {
+      "id": "winter-park-resort",
+      "name": "Winter Park Resort",
+      "latitude": 39.8868391,
+      "longitude": -105.762488,
+      "snowfall_7day": 1.4,
+      "region": "Colorado",
+      "country": "United States"
+    },
+    {
+      "id": "copper-mountain",
+      "name": "Copper Mountain",
+      "latitude": 39.5011318,
+      "longitude": -106.1545788,
+      "snowfall_7day": 0.6,
+      "region": "Colorado",
+      "country": "United States"
+    },
+    {
+      "id": "eldora-mountain-resort",
+      "name": "Eldora Mountain Resort",
+      "latitude": 39.9613759,
+      "longitude": -105.5108312,
+      "snowfall_7day": 1.2,
+      "region": "Colorado",
+      "country": "United States"
+    },
+    {
+      "id": "arapahoe-basin",
+      "name": "Arapahoe Basin",
+      "latitude": 39.6302643,
+      "longitude": -106.0433518,
+      "snowfall_7day": 0.6,
+      "region": "Colorado",
+      "country": "United States"
+    },
+    {
+      "id": "palisades-tahoe",
+      "name": "Palisades Tahoe",
+      "latitude": 39.196849,
+      "longitude": -120.2358066,
+      "snowfall_7day": 29,
+      "region": "California",
+      "country": "United States"
+    },
+    {
+      "id": "mammoth-mountain",
+      "name": "Mammoth Mountain",
+      "latitude": 37.6511273,
+      "longitude": -119.0267624,
+      "snowfall_7day": 28,
+      "region": "California",
+      "country": "United States"
+    },
+    {
+      "id": "june-mountain",
+      "name": "June Mountain",
+      "latitude": 37.648546,
+      "longitude": -118.972079,
+      "snowfall_7day": 13.8,
+      "region": "California",
+      "country": "United States"
+    },
+    {
+      "id": "big-bear-mountain-resort",
+      "name": "Big Bear Mountain Resort",
+      "latitude": 34.2438963,
+      "longitude": -116.9114215,
+      "snowfall_7day": 0.1,
+      "region": "California",
+      "country": "United States"
+    },
+    {
+      "id": "alta-ski-area",
+      "name": "Alta Ski Area",
+      "latitude": 40.5892469,
+      "longitude": -111.6416192,
+      "snowfall_7day": 18.4,
+      "region": "Utah",
+      "country": "United States"
+    },
+    {
+      "id": "snowbird",
+      "name": "Snowbird",
+      "latitude": 40.5724796,
+      "longitude": -111.7732325,
+      "snowfall_7day": 5.6,
+      "region": "Utah",
+      "country": "United States"
+    },
+    {
+      "id": "deer-valley-resort",
+      "name": "Deer Valley Resort",
+      "latitude": 40.62257899999999,
+      "longitude": -111.4850846,
+      "snowfall_7day": 19.7,
+      "region": "Utah",
+      "country": "United States"
+    },
+    {
+      "id": "solitude-mountain-resort",
+      "name": "Solitude Mountain Resort",
+      "latitude": 40.637269,
+      "longitude": -111.6330126,
+      "snowfall_7day": 16.7,
+      "region": "Utah",
+      "country": "United States"
+    },
+    {
+      "id": "brighton-resort",
+      "name": "Brighton Resort",
+      "latitude": 40.637269,
+      "longitude": -111.6330126,
+      "snowfall_7day": 16.7,
+      "region": "Utah",
+      "country": "United States"
+    },
+    {
+      "id": "snowbasin",
+      "name": "Snowbasin",
+      "latitude": 41.2607744,
+      "longitude": -111.7699379,
+      "snowfall_7day": 11.8,
+      "region": "Utah",
+      "country": "United States"
+    },
+    {
+      "id": "jackson-hole-mountain-resort",
+      "name": "Jackson Hole Mountain Resort",
+      "latitude": 43.5876318,
+      "longitude": -110.827952,
+      "snowfall_7day": 14.7,
+      "region": "Wyoming",
+      "country": "United States"
+    },
+    {
+      "id": "big-sky-resort",
+      "name": "Big Sky Resort",
+      "latitude": 45.284358,
+      "longitude": -111.4008347,
+      "snowfall_7day": 3.7,
+      "region": "Montana",
+      "country": "United States"
+    },
+    {
+      "id": "crystal-mountain",
+      "name": "Crystal Mountain",
+      "latitude": 46.9352963,
+      "longitude": -121.4747533,
+      "snowfall_7day": 13.2,
+      "region": "Washington",
+      "country": "United States"
+    },
+    {
+      "id": "the-summit-at-snoqualmie",
+      "name": "The Summit at Snoqualmie",
+      "latitude": 47.3923346,
+      "longitude": -121.4000942,
+      "snowfall_7day": 14.2,
+      "region": "Washington",
+      "country": "United States"
+    },
+    {
+      "id": "mt-bachelor",
+      "name": "Mt. Bachelor",
+      "latitude": 44.0581728,
+      "longitude": -121.3153096,
+      "snowfall_7day": 0.3,
+      "region": "Oregon",
+      "country": "United States"
+    },
+    {
+      "id": "sun-valley",
+      "name": "Sun Valley",
+      "latitude": 43.6807402,
+      "longitude": -114.3636619,
+      "snowfall_7day": 5.6,
+      "region": "Idaho",
+      "country": "United States"
+    },
+    {
+      "id": "schweitzer",
+      "name": "Schweitzer",
+      "latitude": 48.276577,
+      "longitude": -116.553465,
+      "snowfall_7day": 6.6,
+      "region": "Idaho",
+      "country": "United States"
+    },
+    {
+      "id": "taos-ski-valley",
+      "name": "Taos Ski Valley",
+      "latitude": 36.5959999,
+      "longitude": -105.4545,
+      "snowfall_7day": 2,
+      "region": "New Mexico",
+      "country": "United States"
+    },
+    {
+      "id": "stratton",
+      "name": "Stratton",
+      "latitude": 43.1138414,
+      "longitude": -72.905452,
+      "snowfall_7day": 2.8,
+      "region": "Vermont",
+      "country": "United States"
+    },
+    {
+      "id": "sugarbush-resort",
+      "name": "Sugarbush Resort",
+      "latitude": 44.112005,
+      "longitude": -72.85594739999999,
+      "snowfall_7day": 2.9,
+      "region": "Vermont",
+      "country": "United States"
+    },
+    {
+      "id": "killington-resort",
+      "name": "Killington Resort",
+      "latitude": 43.6775677,
+      "longitude": -72.77982469999999,
+      "snowfall_7day": 2.1,
+      "region": "Vermont",
+      "country": "United States"
+    },
+    {
+      "id": "sunday-river",
+      "name": "Sunday River",
+      "latitude": 44.4884245,
+      "longitude": -70.78857649999999,
+      "snowfall_7day": 2.2,
+      "region": "Maine",
+      "country": "United States"
+    },
+    {
+      "id": "sugarloaf",
+      "name": "Sugarloaf",
+      "latitude": 45.0736009,
+      "longitude": -70.26168729999999,
+      "snowfall_7day": 2.7,
+      "region": "Maine",
+      "country": "United States"
+    },
+    {
+      "id": "loon-mountain",
+      "name": "Loon Mountain",
+      "latitude": 44.0444001,
+      "longitude": -71.66844789999999,
+      "snowfall_7day": 3,
+      "region": "New Hampshire",
+      "country": "United States"
+    },
+    {
+      "id": "snowshoe",
+      "name": "Snowshoe",
+      "latitude": 38.4132303,
+      "longitude": -79.9975177,
+      "snowfall_7day": 0,
+      "region": "West Virginia",
+      "country": "United States"
+    },
+    {
+      "id": "boyne-highlands",
+      "name": "Boyne Highlands",
+      "latitude": 45.43167589999999,
+      "longitude": -84.9919992,
+      "snowfall_7day": 3.4,
+      "region": "Michigan",
+      "country": "United States"
+    },
+    {
+      "id": "boyne-mountain",
+      "name": "Boyne Mountain",
+      "latitude": 45.168065,
+      "longitude": -84.9161574,
+      "snowfall_7day": 3.6,
+      "region": "Michigan",
+      "country": "United States"
+    },
+    {
+      "id": "tremblant",
+      "name": "Tremblant",
+      "latitude": 46.2098058,
+      "longitude": -74.5853144,
+      "snowfall_7day": 3.1,
+      "region": "Quebec",
+      "country": "Canada"
+    },
+    {
+      "id": "le-massif-de-charlevoix",
+      "name": "Le Massif de Charlevoix",
+      "latitude": 47.30774299999999,
+      "longitude": -70.56810899999999,
+      "snowfall_7day": 2.3,
+      "region": "Quebec",
+      "country": "Canada"
+    },
+    {
+      "id": "blue-mountain",
+      "name": "Blue Mountain",
+      "latitude": 44.5458789,
+      "longitude": -80.46168279999999,
+      "snowfall_7day": 2.9,
+      "region": "Ontario",
+      "country": "Canada"
+    },
+    {
+      "id": "banff-sunshine",
+      "name": "Banff Sunshine",
+      "latitude": 51.1784304,
+      "longitude": -115.5707903,
+      "snowfall_7day": 0.9,
+      "region": "Alberta",
+      "country": "Canada"
+    },
+    {
+      "id": "lake-louise-ski-resort",
+      "name": "Lake Louise Ski Resort",
+      "latitude": 51.4253705,
+      "longitude": -116.1772552,
+      "snowfall_7day": 3.1,
+      "region": "Alberta",
+      "country": "Canada"
+    },
+    {
+      "id": "mt-norquay",
+      "name": "Mt. Norquay",
+      "latitude": 51.1784304,
+      "longitude": -115.5707903,
+      "snowfall_7day": 0.9,
+      "region": "Alberta",
+      "country": "Canada"
+    },
+    {
+      "id": "revelstoke-mountain-resort",
+      "name": "Revelstoke Mountain Resort",
+      "latitude": 50.95838579999999,
+      "longitude": -118.163078,
+      "snowfall_7day": 8.9,
+      "region": "British Columbia",
+      "country": "Canada"
+    },
+    {
+      "id": "red-mountain",
+      "name": "RED Mountain",
+      "latitude": 49.0781415,
+      "longitude": -117.8000037,
+      "snowfall_7day": 1.6,
+      "region": "British Columbia",
+      "country": "Canada"
+    },
+    {
+      "id": "cypress-mountain",
+      "name": "Cypress Mountain",
+      "latitude": 49.3286251,
+      "longitude": -123.1601981,
+      "snowfall_7day": 1,
+      "region": "British Columbia",
+      "country": "Canada"
+    },
+    {
+      "id": "panorama-mountain-resort",
+      "name": "Panorama Mountain Resort",
+      "latitude": 50.45837059999999,
+      "longitude": -116.238466,
+      "snowfall_7day": 0.8,
+      "region": "British Columbia",
+      "country": "Canada"
+    },
+    {
+      "id": "sun-peaks-resort",
+      "name": "Sun Peaks Resort",
+      "latitude": 50.8815578,
+      "longitude": -119.8972041,
+      "snowfall_7day": 1.9,
+      "region": "British Columbia",
+      "country": "Canada"
+    },
+    {
+      "id": "grouse-mountain",
+      "name": "Grouse Mountain",
+      "latitude": 49.3199816,
+      "longitude": -123.0724139,
+      "snowfall_7day": 1.2,
+      "region": "British Columbia",
+      "country": "Canada"
+    },
+    {
+      "id": "silverstar-mountain-resort",
+      "name": "SilverStar Mountain Resort",
+      "latitude": 50.2670137,
+      "longitude": -119.2720107,
+      "snowfall_7day": 0.3,
+      "region": "British Columbia",
+      "country": "Canada"
+    }
+  ]
+}

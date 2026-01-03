@@ -6,7 +6,7 @@ export interface SkiResort {
     lng: number;
   };
   pass: 'IKON' | 'OTHER';
-  state: string;
+  region: string;
   country: string;
   accessType?: string;
   address?: string;
@@ -18,4 +18,21 @@ export interface RouteInfo {
   destination: SkiResort;
   distance: string;
   duration: string;
+}
+
+export interface SnowfallData {
+  generated_at: string;
+  forecast_period: string;
+  unit: string;
+  resorts: SnowfallResort[];
+}
+
+export interface SnowfallResort {
+  id: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+  snowfall_7day: number;
+  region: string;
+  country: string;
 }

@@ -1,6 +1,7 @@
 import './style.css';
 import { skiResorts } from './resorts';
-import { SkiResort, RouteInfo } from './types';
+import { SkiResort, RouteInfo, SnowfallData } from './types';
+import snowfallData from '../snowfall_forecast.json';
 
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
@@ -11,10 +12,14 @@ class SkiMapApp {
   private directionsRenderers: google.maps.DirectionsRenderer[] = [];
   private selectedResorts: SkiResort[] = [];
   private routes: RouteInfo[] = [];
+  private snowfallOverlays: google.maps.Marker[] = [];
+  private snowfallData: SnowfallData = snowfallData as SnowfallData;
+  private showSnowfall: boolean = true;
 
   async init() {
     await this.loadGoogleMapsAPI();
     this.initMap();
+    this.initSnowfallOverlay();
     this.initResortMarkers();
     this.setupEventListeners();
   }
@@ -91,11 +96,18 @@ class SkiMapApp {
   }
 
   private createInfoWindowContent(resort: SkiResort): string {
+    // Find snowfall data for this resort
+    const snowfallResort = this.snowfallData.resorts.find(r => r.id === resort.id);
+    const snowfallInfo = snowfallResort
+      ? `<p style="font-size: 0.95em; color: #1e40af; font-weight: 600;">❄️ ${snowfallResort.snowfall_7day}" forecast (7 days)</p>`
+      : '';
+
     return `
       <div class="info-window">
         <h3>${resort.name}</h3>
-        <p>${resort.state}, ${resort.country}</p>
+        <p>${resort.region}, ${resort.country}</p>
         ${resort.accessType ? `<p style="font-size: 0.9em; color: #666;">Access: ${resort.accessType}</p>` : ''}
+        ${snowfallInfo}
         <span class="pass-badge">${resort.pass} PASS</span>
       </div>
     `;
@@ -209,11 +221,74 @@ class SkiMapApp {
     }
   }
 
+  private initSnowfallOverlay() {
+    // Get max snowfall for color scaling
+    const maxSnowfall = Math.max(...this.snowfallData.resorts.map(r => r.snowfall_7day));
+
+    // Create overlay markers for each resort (fixed pixel size)
+    this.snowfallData.resorts.forEach((resort) => {
+      const snowfall = resort.snowfall_7day;
+      const intensity = Math.min(snowfall / maxSnowfall, 1); // 0 to 1 scale
+
+      // Color scale: blue (low) -> cyan -> white (high)
+      let fillColor: string;
+      if (intensity < 0.25) {
+        fillColor = '#4169E1'; // Royal blue
+      } else if (intensity < 0.5) {
+        fillColor = '#00CED1'; // Dark turquoise
+      } else if (intensity < 0.75) {
+        fillColor = '#87CEEB'; // Sky blue
+      } else {
+        fillColor = '#FFFFFF'; // White (powder!)
+      }
+
+      // Scale based on snowfall (18-35 pixels) - always larger than resort markers (8px)
+      const scale = 18 + intensity * 17; // 18-35 pixel radius
+
+      const overlay = new google.maps.Marker({
+        position: { lat: resort.latitude, lng: resort.longitude },
+        map: this.showSnowfall ? this.map : null,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: scale,
+          fillColor: fillColor,
+          fillOpacity: 0.3,
+          strokeColor: fillColor,
+          strokeOpacity: 0.5,
+          strokeWeight: 1.5,
+        },
+        clickable: false,
+        zIndex: 1, // Below resort markers
+      });
+
+      this.snowfallOverlays.push(overlay);
+    });
+
+    console.log(`Snowfall overlay initialized with ${this.snowfallOverlays.length} regions`);
+    console.log(`Data generated: ${new Date(this.snowfallData.generated_at).toLocaleString()}`);
+  }
+
+  private toggleSnowfallOverlay(show: boolean) {
+    this.showSnowfall = show;
+    this.snowfallOverlays.forEach(overlay => {
+      overlay.setMap(show ? this.map : null);
+    });
+  }
+
   private setupEventListeners() {
     const clearButton = document.getElementById('clearRoutes');
     if (clearButton) {
       clearButton.addEventListener('click', () => {
         this.clearAllRoutes();
+      });
+    }
+
+    const toggleSnowButton = document.getElementById('toggleSnow');
+    if (toggleSnowButton) {
+      toggleSnowButton.addEventListener('click', () => {
+        this.showSnowfall = !this.showSnowfall;
+        this.toggleSnowfallOverlay(this.showSnowfall);
+        toggleSnowButton.textContent = this.showSnowfall ? 'Hide Snowfall' : 'Show Snowfall';
       });
     }
   }

@@ -17,5 +17,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "ikon_pass_resorts_north_america.json"]
+  "include": ["src", "ikon_pass_resorts_north_america.json", "snowfall_forecast.json"]
 }

@@ -1695,6 +1695,19 @@
       "longitude": -122.2027062,
       "formatted_address": "4500 Ski Park Hwy, McCloud, CA 96057, USA",
       "pass": "INDEPENDENT"
+    },
+    {
+      "name": "Sierra at Tahoe",
+      "address": "1111 Sierra-at-Tahoe Road, Twin Bridges, CA 95735",
+      "city": "Twin Bridges",
+      "country": "United States",
+      "region": "California",
+      "id": "sierra-at-tahoe",
+      "access_type": "7 days",
+      "latitude": 38.8003366,
+      "longitude": -120.0804267,
+      "formatted_address": "1111 Sierra-At-Tahoe Rd, Twin Bridges, CA 95735, USA",
+      "pass": "IKON"
     }
   ]
 }

@@ -76,14 +76,33 @@ class SkiMapApp {
       throw new Error('Map element not found');
     }
 
-    // Initialize map centered on western North America ski areas
+    // Initialize map centered on western North America ski areas with darkened terrain
     this.map = new google.maps.Map(mapElement, {
       center: mapConfig.initialView.center,
       zoom: 5,
-      mapTypeId: 'hybrid',
+      mapTypeId: 'terrain',
       mapTypeControl: true,
       streetViewControl: false,
       styles: [
+        {
+          elementType: 'geometry',
+          stylers: [
+            { lightness: -60 },
+            { saturation: -40 }
+          ]
+        },
+        {
+          elementType: 'labels.text.fill',
+          stylers: [
+            { lightness: 20 }
+          ]
+        },
+        {
+          elementType: 'labels.text.stroke',
+          stylers: [
+            { lightness: -80 }
+          ]
+        },
         {
           featureType: 'poi',
           elementType: 'labels',

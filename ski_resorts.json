@@ -498,13 +498,13 @@
     },
     {
       "name": "Mt. Norquay",
-      "address": "Banff, AB",
+      "address": "2 Mt Norquay Rd, Banff, AB T1L 1B4",
       "city": "Banff",
       "country": "Canada",
       "access_type": "7 days (SkiBig3)",
-      "latitude": 51.1784304,
-      "longitude": -115.5707903,
-      "formatted_address": "Banff, AB, Canada",
+      "latitude": 51.203212,
+      "longitude": -115.598599,
+      "formatted_address": "2 Mt Norquay Rd, Banff, AB T1L 1B4, Canada",
       "id": "mt-norquay",
       "region": "Alberta",
       "pass": "IKON"

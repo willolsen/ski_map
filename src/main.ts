@@ -108,6 +108,11 @@ class SkiMapApp {
           elementType: 'labels',
           stylers: [{ visibility: 'off' }],
         },
+        {
+          featureType: 'road.highway',
+          elementType: 'labels.icon',
+          stylers: [{ visibility: 'off' }],
+        },
       ],
     });
 

@@ -472,13 +472,13 @@
     },
     {
       "name": "Banff Sunshine",
-      "address": "Box 1510, Banff, AB T1L 1J5",
+      "address": "1 Sunshine Village Access Rd, Seebe, AB T0L 0C0",
       "city": "Banff",
       "country": "Canada",
       "access_type": "7 days (SkiBig3)",
-      "latitude": 51.1784304,
-      "longitude": -115.5707903,
-      "formatted_address": "Banff, AB, Canada",
+      "latitude": 51.1150943,
+      "longitude": -115.7640767,
+      "formatted_address": "1 Sunshine Village Access Rd, Seebe, AB T0L 0C0, Canada",
       "id": "banff-sunshine",
       "region": "Alberta",
       "pass": "IKON"

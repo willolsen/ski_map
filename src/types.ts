@@ -43,3 +43,32 @@ export interface DailyForecast {
   snow_inches: number;
   weather_code: number;
 }
+
+export interface TripStop {
+  id: string;
+  order: number;
+  location: google.maps.LatLng;
+  type: 'resort' | 'custom';
+  resort?: SkiResort;
+  customName?: string;
+  marker?: google.maps.Marker;
+}
+
+export interface RouteSegment {
+  fromStopId: string;
+  toStopId: string;
+  distance: string;
+  distanceValue: number;
+  duration: string;
+  durationValue: number;
+}
+
+export interface TripSummary {
+  totalDistance: string;
+  totalDistanceValue: number;
+  totalDuration: string;
+  totalDurationValue: number;
+  stopCount: number;
+  resortCount: number;
+  customCount: number;
+}

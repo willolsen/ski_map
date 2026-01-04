@@ -1,6 +1,6 @@
 import './style.css';
 import { skiResorts } from './resorts';
-import { SkiResort, RouteInfo, PrecipitationData } from './types';
+import { SkiResort, PrecipitationData, TripStop, RouteSegment } from './types';
 import precipitationData from '../snowfall_forecast.json';
 import mapConfig from '../map-config.json';
 
@@ -13,20 +13,20 @@ class SkiMapApp {
   private map!: google.maps.Map;
   private markers: Map<string, google.maps.Marker> = new Map();
   private directionsService!: google.maps.DirectionsService;
-  private directionsRenderers: google.maps.DirectionsRenderer[] = [];
-  private selectedResorts: SkiResort[] = [];
-  private routes: RouteInfo[] = [];
   private snowOverlays: google.maps.Marker[] = [];
   private rainOverlays: google.maps.Marker[] = [];
   private precipitationData: PrecipitationData = precipitationData as PrecipitationData;
   private showPrecipitation: boolean = true;
   private startDay: number = 0; // First day (today)
   private endDay: number = 6;   // 7 days total (0-6)
-  // Starting location feature
-  private startingLocation: google.maps.LatLng | null = null;
-  private startingLocationMarker: google.maps.Marker | null = null;
-  private isSettingLocation: boolean = false;
+  // Trip planner properties
+  private tripStops: TripStop[] = [];
+  private tripStopMarkers: Map<string, google.maps.Marker> = new Map();
+  private routeSegments: RouteSegment[] = [];
+  private tripDirectionsRenderer: google.maps.DirectionsRenderer | null = null;
   private mapClickListener: google.maps.MapsEventListener | null = null;
+  private isAddingCustomStop: boolean = false;
+  private customStopCounter: number = 0;
 
   private getMarkerColor(pass: string): string {
     switch (pass) {
@@ -156,7 +156,6 @@ class SkiMapApp {
         // Update info window content with current date range
         infoWindow.setContent(this.createInfoWindowContent(resort));
         infoWindow.open(this.map, marker);
-        this.handleResortClick(resort);
       });
 
       this.markers.set(resort.id, marker);
@@ -186,6 +185,14 @@ class SkiMapApp {
       }
     }
 
+    // Check if resort is already in trip
+    const isInTrip = this.tripStops.some(stop =>
+      stop.type === 'resort' && stop.resort?.id === resort.id
+    );
+
+    const buttonClass = isInTrip ? 'remove-from-trip-btn' : 'add-stop-btn';
+    const buttonText = isInTrip ? 'Remove from Trip' : 'Add to Trip';
+
     return `
       <div class="info-window">
         <h3>${resort.name}</h3>
@@ -193,144 +200,11 @@ class SkiMapApp {
         ${resort.accessType ? `<p style="font-size: 0.9em; color: #666;">Access: ${resort.accessType}</p>` : ''}
         ${precipInfo}
         <span class="pass-badge">${resort.pass} PASS</span>
+        <button class="${buttonClass}" data-resort-id="${resort.id}">
+          ${buttonText}
+        </button>
       </div>
     `;
-  }
-
-  private handleResortClick(resort: SkiResort) {
-    // NEW BEHAVIOR: If starting location is set, route directly to clicked resort
-    if (this.startingLocation) {
-      // Check if we already have a route to this resort from start
-      const existingRouteIndex = this.routes.findIndex(
-        route => route.destination.id === resort.id &&
-                 'lat' in (route.origin as any).location // Check if origin is a location, not a resort
-      );
-
-      if (existingRouteIndex >= 0) {
-        // Already have route to this resort, remove it (toggle off)
-        this.directionsRenderers[existingRouteIndex].setMap(null);
-        this.directionsRenderers.splice(existingRouteIndex, 1);
-        this.routes.splice(existingRouteIndex, 1);
-        this.highlightMarker(resort.id, false);
-
-        if (this.routes.length === 0) {
-          this.updateRouteInfo('Click a resort to route from your location');
-        } else {
-          this.updateRouteInfo(`${this.routes.length} route(s) displayed`);
-        }
-      } else {
-        // Calculate new route from starting location
-        this.highlightMarker(resort.id, true);
-        this.calculateRouteFromStart(resort);
-      }
-      return;
-    }
-
-    // EXISTING BEHAVIOR: Two-resort selection when no starting location
-    if (this.selectedResorts.length === 0) {
-      this.selectedResorts.push(resort);
-      this.highlightMarker(resort.id, true);
-      this.updateRouteInfo('Select another resort to calculate route');
-    } else if (this.selectedResorts.length === 1) {
-      if (this.selectedResorts[0].id === resort.id) {
-        // Clicked same resort, deselect
-        this.selectedResorts = [];
-        this.highlightMarker(resort.id, false);
-        this.updateRouteInfo('');
-      } else {
-        // Second resort selected, calculate route
-        this.selectedResorts.push(resort);
-        this.highlightMarker(resort.id, true);
-        this.calculateAndDisplayRoute(this.selectedResorts[0], this.selectedResorts[1]);
-      }
-    } else {
-      // Reset selection
-      this.clearSelection();
-      this.selectedResorts.push(resort);
-      this.highlightMarker(resort.id, true);
-      this.updateRouteInfo('Select another resort to calculate route');
-    }
-  }
-
-  private highlightMarker(resortId: string, highlight: boolean) {
-    const marker = this.markers.get(resortId);
-    if (marker) {
-      const resort = skiResorts.find((r) => r.id === resortId);
-      if (resort) {
-        marker.setIcon({
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: highlight ? 12 : 8,
-          fillColor: this.getMarkerColor(resort.pass),
-          fillOpacity: 1,
-          strokeColor: highlight ? '#fbbf24' : '#ffffff',
-          strokeWeight: highlight ? 3 : 2,
-        });
-      }
-    }
-  }
-
-  private async calculateAndDisplayRoute(origin: SkiResort, destination: SkiResort) {
-    this.updateRouteInfo('Calculating route...');
-
-    try {
-      const result = await this.directionsService.route({
-        origin: origin.location,
-        destination: destination.location,
-        travelMode: google.maps.TravelMode.DRIVING,
-      });
-
-      const renderer = new google.maps.DirectionsRenderer({
-        map: this.map,
-        directions: result,
-        suppressMarkers: true, // We already have our custom markers
-        polylineOptions: {
-          strokeColor: '#8b5cf6',
-          strokeWeight: 4,
-          strokeOpacity: 0.7,
-        },
-      });
-
-      this.directionsRenderers.push(renderer);
-
-      // Extract route information
-      const route = result.routes[0];
-      const leg = route.legs[0];
-
-      const routeInfo: RouteInfo = {
-        origin,
-        destination,
-        distance: leg.distance?.text || 'Unknown',
-        duration: leg.duration?.text || 'Unknown',
-      };
-
-      this.routes.push(routeInfo);
-      this.updateRouteInfo(
-        `${origin.name} → ${destination.name}: ${routeInfo.distance} (${routeInfo.duration})`
-      );
-
-      // Reset selection after a short delay
-      setTimeout(() => {
-        this.clearSelection();
-      }, 500);
-    } catch (error) {
-      console.error('Error calculating route:', error);
-      this.updateRouteInfo('Error calculating route');
-      this.clearSelection();
-    }
-  }
-
-  private clearSelection() {
-    this.selectedResorts.forEach((resort) => {
-      this.highlightMarker(resort.id, false);
-    });
-    this.selectedResorts = [];
-  }
-
-  private updateRouteInfo(text: string) {
-    const routeInfoElement = document.getElementById('routeInfo');
-    if (routeInfoElement) {
-      routeInfoElement.textContent = text;
-    }
   }
 
   private initPrecipitationOverlay() {
@@ -501,274 +375,405 @@ class SkiMapApp {
     this.rainOverlays.forEach(overlay => overlay.setMap(show ? this.map : null));
   }
 
-  // Modal management methods
-  private showLocationModal() {
-    const modal = document.getElementById('locationModal');
-    if (modal) {
-      modal.classList.remove('hidden');
-    }
+  // ============================================================================
+  // TRIP PLANNER METHODS
+  // ============================================================================
+
+  private generateStopId(): string {
+    return `stop_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private hideLocationModal() {
-    const modal = document.getElementById('locationModal');
-    if (modal) {
-      modal.classList.add('hidden');
-    }
-  }
+  private addResortStop(resortId: string) {
+    const resort = skiResorts.find(r => r.id === resortId);
+    if (!resort) return;
 
-  // Toast notification method
-  private showToast(message: string, type: 'success' | 'error' = 'success') {
-    const toast = document.getElementById('toast');
-    if (!toast) return;
+    const existingStop = this.tripStops.find(
+      stop => stop.type === 'resort' && stop.resort?.id === resortId
+    );
 
-    toast.textContent = message;
-    toast.style.background = type === 'success' ? '#10b981' : '#ef4444';
-    toast.classList.remove('hidden');
-
-    setTimeout(() => {
-      toast.classList.add('hidden');
-    }, 2000);
-  }
-
-  // Geolocation method
-  private useCurrentLocation() {
-    this.hideLocationModal();
-
-    if (!navigator.geolocation) {
-      this.showToast('Geolocation is not supported by your browser', 'error');
+    if (existingStop) {
+      this.removeStop(existingStop.id);
       return;
     }
 
-    this.updateRouteInfo('Getting your location...');
+    const stop: TripStop = {
+      id: this.generateStopId(),
+      order: this.tripStops.length + 1,
+      location: new google.maps.LatLng(resort.location.lat, resort.location.lng),
+      type: 'resort',
+      resort: resort
+    };
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const location = new google.maps.LatLng(
-          position.coords.latitude,
-          position.coords.longitude
-        );
-        this.setStartingLocation(location);
-        this.showToast('Starting location set!');
-        this.updateRouteInfo('Click a resort to route from your location');
-      },
-      (error) => {
-        let errorMsg = 'Unable to get your location';
-        switch(error.code) {
-          case error.PERMISSION_DENIED:
-            errorMsg = 'Location permission denied';
-            break;
-          case error.POSITION_UNAVAILABLE:
-            errorMsg = 'Location unavailable';
-            break;
-          case error.TIMEOUT:
-            errorMsg = 'Location request timed out';
-            break;
-        }
-        this.showToast(errorMsg, 'error');
-        this.updateRouteInfo('');
-      },
-      { timeout: 10000, enableHighAccuracy: true }
-    );
+    this.tripStops.push(stop);
+    this.createStopMarker(stop);
+    this.updateTripPanel();
+    this.calculateTripRoute();
+    this.showToast(`${resort.name} added to trip`);
   }
 
-  // Map click mode methods
-  private enableMapClickMode() {
-    this.hideLocationModal();
-    this.isSettingLocation = true;
-
-    // Show banner
-    const banner = document.getElementById('mapClickBanner');
-    if (banner) {
-      banner.classList.remove('hidden');
+  private enableCustomStopMode() {
+    if (this.isAddingCustomStop) {
+      this.disableCustomStopMode();
+      return;
     }
 
-    // Change cursor
+    this.isAddingCustomStop = true;
     const mapDiv = document.getElementById('map');
     if (mapDiv) {
-      mapDiv.classList.add('map-click-mode');
+      mapDiv.classList.add('adding-stop');
     }
 
-    // Add click listener to map
+    const button = document.getElementById('addCustomStop');
+    if (button) {
+      button.textContent = 'Cancel';
+      button.style.background = '#ef4444';
+    }
+
+    this.showToast('Click on map to add a stop');
+
     this.mapClickListener = this.map.addListener('click', (event: google.maps.MapMouseEvent) => {
-      if (event.latLng && this.isSettingLocation) {
-        this.setStartingLocation(event.latLng);
-        this.disableMapClickMode();
-        this.showToast('Starting location set!');
-        this.updateRouteInfo('Click a resort to route from your location');
+      if (event.latLng && this.isAddingCustomStop) {
+        this.addCustomStop(event.latLng);
+        this.disableCustomStopMode();
       }
     });
   }
 
-  private disableMapClickMode() {
-    this.isSettingLocation = false;
+  private disableCustomStopMode() {
+    this.isAddingCustomStop = false;
 
-    // Hide banner
-    const banner = document.getElementById('mapClickBanner');
-    if (banner) {
-      banner.classList.add('hidden');
-    }
-
-    // Restore cursor
     const mapDiv = document.getElementById('map');
     if (mapDiv) {
-      mapDiv.classList.remove('map-click-mode');
+      mapDiv.classList.remove('adding-stop');
     }
 
-    // Remove click listener
+    const button = document.getElementById('addCustomStop');
+    if (button) {
+      button.textContent = 'Add Custom Stop';
+      button.style.background = '';
+    }
+
     if (this.mapClickListener) {
       google.maps.event.removeListener(this.mapClickListener);
       this.mapClickListener = null;
     }
   }
 
-  // Location management methods
-  private setStartingLocation(location: google.maps.LatLng) {
-    this.startingLocation = location;
+  private addCustomStop(location: google.maps.LatLng) {
+    this.customStopCounter++;
 
-    // Remove existing marker if present
-    if (this.startingLocationMarker) {
-      this.startingLocationMarker.setMap(null);
-    }
-
-    // Create custom house icon using SVG path
-    const houseIcon = {
-      path: 'M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z',
-      fillColor: '#ef4444',
-      fillOpacity: 1,
-      strokeColor: '#ffffff',
-      strokeWeight: 2,
-      scale: 1.5,
-      anchor: new google.maps.Point(12, 24),
+    const stop: TripStop = {
+      id: this.generateStopId(),
+      order: this.tripStops.length + 1,
+      location: location,
+      type: 'custom',
+      customName: `Custom Stop ${this.customStopCounter}`
     };
 
-    // Create marker
-    this.startingLocationMarker = new google.maps.Marker({
-      position: location,
-      map: this.map,
-      title: 'Starting Location',
-      icon: houseIcon,
-      draggable: true,
-      zIndex: 200,
-      label: {
-        text: 'START',
-        color: '#ef4444',
-        fontSize: '10px',
-        fontWeight: 'bold',
-      },
+    this.tripStops.push(stop);
+    this.createStopMarker(stop);
+    this.updateTripPanel();
+    this.calculateTripRoute();
+    this.showToast(`Stop ${this.customStopCounter} added to trip`);
+  }
+
+  private createStopMarker(stop: TripStop) {
+    if (stop.type === 'resort' && stop.resort) {
+      const marker = this.markers.get(stop.resort.id);
+      if (marker) {
+        marker.setLabel({
+          text: stop.order.toString(),
+          color: '#ffffff',
+          fontSize: '14px',
+          fontWeight: 'bold',
+        });
+        marker.setZIndex(300);
+        stop.marker = marker;
+      }
+    } else {
+      const marker = new google.maps.Marker({
+        position: stop.location,
+        map: this.map,
+        title: stop.customName,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 14,
+          fillColor: '#f97316',
+          fillOpacity: 1,
+          strokeColor: '#ffffff',
+          strokeWeight: 3,
+        },
+        label: {
+          text: stop.order.toString(),
+          color: '#ffffff',
+          fontSize: '14px',
+          fontWeight: 'bold',
+        },
+        draggable: true,
+        zIndex: 300
+      });
+
+      marker.addListener('dragend', () => {
+        const newPos = marker.getPosition();
+        if (newPos) {
+          stop.location = newPos;
+          this.calculateTripRoute();
+          this.showToast('Stop location updated');
+        }
+      });
+
+      this.tripStopMarkers.set(stop.id, marker);
+      stop.marker = marker;
+    }
+  }
+
+  private removeStop(stopId: string) {
+    const stopIndex = this.tripStops.findIndex(s => s.id === stopId);
+    if (stopIndex === -1) return;
+
+    const stop = this.tripStops[stopIndex];
+
+    if (stop.type === 'resort' && stop.resort) {
+      const marker = this.markers.get(stop.resort.id);
+      if (marker) {
+        marker.setLabel(null);
+        marker.setZIndex(100);
+      }
+    } else {
+      const marker = this.tripStopMarkers.get(stopId);
+      if (marker) {
+        marker.setMap(null);
+        this.tripStopMarkers.delete(stopId);
+      }
+    }
+
+    this.tripStops.splice(stopIndex, 1);
+
+    this.tripStops.forEach((s, idx) => {
+      s.order = idx + 1;
+      if (s.marker) {
+        s.marker.setLabel({
+          text: s.order.toString(),
+          color: '#ffffff',
+          fontSize: '14px',
+          fontWeight: 'bold',
+        });
+      }
     });
 
-    // Handle marker drag
-    this.startingLocationMarker.addListener('dragend', () => {
-      if (this.startingLocationMarker) {
-        const newPos = this.startingLocationMarker.getPosition();
-        if (newPos) {
-          this.startingLocation = newPos;
-          this.showToast('Starting location updated!');
-          // Clear any existing routes since start location changed
-          this.clearAllRoutes();
+    this.updateTripPanel();
+    this.calculateTripRoute();
+
+    const stopName = stop.type === 'resort' ? stop.resort?.name : stop.customName;
+    this.showToast(`${stopName} removed from trip`);
+  }
+
+  private clearAllStops() {
+    if (this.tripStops.length === 0) return;
+
+    if (!confirm(`Clear all ${this.tripStops.length} stops from your trip?`)) {
+      return;
+    }
+
+    this.tripStops.forEach(stop => {
+      if (stop.type === 'resort' && stop.resort) {
+        const marker = this.markers.get(stop.resort.id);
+        if (marker) {
+          marker.setLabel(null);
+          marker.setZIndex(100);
+        }
+      } else {
+        const marker = this.tripStopMarkers.get(stop.id);
+        if (marker) {
+          marker.setMap(null);
         }
       }
     });
 
-    // Handle right-click to remove
-    this.startingLocationMarker.addListener('rightclick', () => {
-      if (confirm('Remove starting location?')) {
-        this.clearStartingLocation();
-        this.clearAllRoutes();
-        this.showToast('Starting location removed');
+    this.tripStopMarkers.clear();
+    this.tripStops = [];
+    this.routeSegments = [];
+    this.customStopCounter = 0;
+
+    if (this.tripDirectionsRenderer) {
+      this.tripDirectionsRenderer.setMap(null);
+      this.tripDirectionsRenderer = null;
+    }
+
+    this.updateTripPanel();
+    this.showToast('Trip cleared');
+  }
+
+  private async calculateTripRoute() {
+    if (this.tripStops.length < 2) {
+      if (this.tripDirectionsRenderer) {
+        this.tripDirectionsRenderer.setMap(null);
+        this.tripDirectionsRenderer = null;
       }
-    });
-
-    // Update button text
-    const button = document.getElementById('setStartLocation');
-    if (button) {
-      button.textContent = 'Update Start Location';
+      this.routeSegments = [];
+      this.updateTripPanel();
+      return;
     }
-
-    // Pan map to show starting location
-    this.map.panTo(location);
-  }
-
-  private clearStartingLocation() {
-    this.startingLocation = null;
-
-    if (this.startingLocationMarker) {
-      this.startingLocationMarker.setMap(null);
-      this.startingLocationMarker = null;
-    }
-
-    // Update button text
-    const button = document.getElementById('setStartLocation');
-    if (button) {
-      button.textContent = 'Set Start Location';
-    }
-
-    this.updateRouteInfo('');
-  }
-
-  // Calculate route from starting location
-  private async calculateRouteFromStart(destination: SkiResort) {
-    if (!this.startingLocation) return;
-
-    this.updateRouteInfo('Calculating route...');
 
     try {
+      const origin = this.tripStops[0].location;
+      const destination = this.tripStops[this.tripStops.length - 1].location;
+      const waypoints = this.tripStops.slice(1, -1).map(stop => ({
+        location: stop.location,
+        stopover: true
+      }));
+
       const result = await this.directionsService.route({
-        origin: this.startingLocation,
-        destination: destination.location,
+        origin: origin,
+        destination: destination,
+        waypoints: waypoints,
         travelMode: google.maps.TravelMode.DRIVING,
+        optimizeWaypoints: false
       });
 
-      const renderer = new google.maps.DirectionsRenderer({
-        map: this.map,
-        directions: result,
-        suppressMarkers: true,
-        polylineOptions: {
-          strokeColor: '#ef4444',
-          strokeWeight: 4,
-          strokeOpacity: 0.7,
-        },
-      });
-
-      this.directionsRenderers.push(renderer);
-
-      const route = result.routes[0];
-      const leg = route.legs[0];
-
-      const routeInfo: RouteInfo = {
-        origin: {
-          name: 'Start',
-          location: this.startingLocation
-        } as any,
-        destination,
-        distance: leg.distance?.text || 'Unknown',
-        duration: leg.duration?.text || 'Unknown',
-      };
-
-      this.routes.push(routeInfo);
-
-      if (this.routes.length === 1) {
-        this.updateRouteInfo(
-          `Start → ${destination.name}: ${routeInfo.distance} (${routeInfo.duration})`
-        );
-      } else {
-        this.updateRouteInfo(`${this.routes.length} routes displayed`);
+      if (!this.tripDirectionsRenderer) {
+        this.tripDirectionsRenderer = new google.maps.DirectionsRenderer({
+          map: this.map,
+          suppressMarkers: true,
+          polylineOptions: {
+            strokeColor: '#667eea',
+            strokeWeight: 5,
+            strokeOpacity: 0.8,
+          },
+        });
       }
+
+      this.tripDirectionsRenderer.setDirections(result);
+
+      this.routeSegments = [];
+      const route = result.routes[0];
+
+      route.legs.forEach((leg, index) => {
+        this.routeSegments.push({
+          fromStopId: this.tripStops[index].id,
+          toStopId: this.tripStops[index + 1].id,
+          distance: leg.distance?.text || 'Unknown',
+          distanceValue: leg.distance?.value || 0,
+          duration: leg.duration?.text || 'Unknown',
+          durationValue: leg.duration?.value || 0
+        });
+      });
+
+      this.updateTripPanel();
+
     } catch (error) {
-      console.error('Error calculating route:', error);
+      console.error('Error calculating trip route:', error);
       this.showToast('Error calculating route', 'error');
-      this.highlightMarker(destination.id, false);
     }
+  }
+
+  private updateTripPanel() {
+    const panel = document.getElementById('tripPanel');
+    const emptyState = document.getElementById('emptyState');
+    const stopsList = document.getElementById('stopsList');
+    const summary = document.getElementById('tripSummary');
+
+    if (!panel || !emptyState || !stopsList || !summary) return;
+
+    if (this.tripStops.length === 0) {
+      panel.classList.add('hidden');
+      emptyState.classList.remove('hidden');
+      stopsList.classList.add('hidden');
+      summary.classList.add('hidden');
+    } else {
+      panel.classList.remove('hidden');
+      emptyState.classList.add('hidden');
+      stopsList.classList.remove('hidden');
+
+      let stopsHTML = '';
+
+      this.tripStops.forEach((stop, index) => {
+        const stopName = stop.type === 'resort' ? stop.resort!.name : stop.customName!;
+        const stopLocation = stop.type === 'resort'
+          ? `${stop.resort!.region}, ${stop.resort!.country}`
+          : 'Custom Location';
+
+        stopsHTML += `
+          <div class="stop-card" data-stop-id="${stop.id}">
+            <div class="stop-number">${stop.order}</div>
+            <div class="stop-info">
+              <div class="stop-name">${stopName}</div>
+              <div class="stop-location">${stopLocation}</div>
+            </div>
+            <button class="remove-stop-btn" data-stop-id="${stop.id}" title="Remove stop">×</button>
+          </div>
+        `;
+
+        if (index < this.tripStops.length - 1 && this.routeSegments[index]) {
+          const segment = this.routeSegments[index];
+          stopsHTML += `
+            <div class="route-segment">
+              <div class="route-line"></div>
+              <div class="route-stats">
+                <span class="route-distance">🚗 ${segment.distance}</span>
+                <span class="route-duration">⏱️ ${segment.duration}</span>
+              </div>
+            </div>
+          `;
+        }
+      });
+
+      stopsList.innerHTML = stopsHTML;
+
+      if (this.routeSegments.length > 0) {
+        summary.classList.remove('hidden');
+
+        const totalDistanceValue = this.routeSegments.reduce((sum, seg) => sum + seg.distanceValue, 0);
+        const totalDurationValue = this.routeSegments.reduce((sum, seg) => sum + seg.durationValue, 0);
+
+        const totalDistanceMiles = (totalDistanceValue * 0.000621371).toFixed(1);
+        const totalHours = Math.floor(totalDurationValue / 3600);
+        const totalMinutes = Math.round((totalDurationValue % 3600) / 60);
+
+        const distanceEl = document.getElementById('totalDistance');
+        const durationEl = document.getElementById('totalDuration');
+        const stopsEl = document.getElementById('totalStops');
+
+        if (distanceEl) distanceEl.textContent = `${totalDistanceMiles} miles`;
+        if (durationEl) durationEl.textContent = `${totalHours}h ${totalMinutes}m`;
+        if (stopsEl) stopsEl.textContent = `${this.tripStops.length} stops`;
+      } else {
+        summary.classList.add('hidden');
+      }
+    }
+  }
+
+  private showToast(message: string, type: 'success' | 'error' = 'success') {
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+
+    toast.textContent = message;
+    toast.className = 'toast';
+    if (type === 'error') toast.classList.add('error');
+
+    setTimeout(() => {
+      toast.classList.add('hidden');
+    }, 3000);
   }
 
   private setupEventListeners() {
-    const clearButton = document.getElementById('clearRoutes');
-    if (clearButton) {
-      clearButton.addEventListener('click', () => {
-        this.clearAllRoutes();
+    // Add Custom Stop button
+    const addStopButton = document.getElementById('addCustomStop');
+    if (addStopButton) {
+      addStopButton.addEventListener('click', () => {
+        this.enableCustomStopMode();
       });
     }
 
+    // Clear Trip button
+    const clearTripButton = document.getElementById('clearTrip');
+    if (clearTripButton) {
+      clearTripButton.addEventListener('click', () => {
+        this.clearAllStops();
+      });
+    }
+
+    // Toggle precipitation button
     const toggleButton = document.getElementById('togglePrecipitation');
     if (toggleButton) {
       toggleButton.addEventListener('click', () => {
@@ -778,70 +783,31 @@ class SkiMapApp {
       });
     }
 
-    // Starting location button
-    const setStartButton = document.getElementById('setStartLocation');
-    if (setStartButton) {
-      setStartButton.addEventListener('click', () => {
-        this.showLocationModal();
-      });
-    }
+    // Event delegation for info window buttons (dynamically added)
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
 
-    // Modal option buttons
-    const useLocationBtn = document.getElementById('useCurrentLocation');
-    if (useLocationBtn) {
-      useLocationBtn.addEventListener('click', () => {
-        this.useCurrentLocation();
-      });
-    }
+      // Handle "Add to Trip" / "Remove from Trip" buttons in info windows
+      if (target.classList.contains('add-stop-btn')) {
+        const resortId = target.getAttribute('data-resort-id');
+        if (resortId) {
+          this.addResortStop(resortId);
+        }
+      } else if (target.classList.contains('remove-from-trip-btn')) {
+        const resortId = target.getAttribute('data-resort-id');
+        if (resortId) {
+          this.addResortStop(resortId); // Toggle behavior
+        }
+      }
 
-    const clickMapBtn = document.getElementById('clickOnMap');
-    if (clickMapBtn) {
-      clickMapBtn.addEventListener('click', () => {
-        this.enableMapClickMode();
-      });
-    }
-
-    // Modal cancel button
-    const cancelModalBtn = document.getElementById('cancelModal');
-    if (cancelModalBtn) {
-      cancelModalBtn.addEventListener('click', () => {
-        this.hideLocationModal();
-      });
-    }
-
-    // Map click banner cancel button
-    const cancelMapClickBtn = document.getElementById('cancelMapClick');
-    if (cancelMapClickBtn) {
-      cancelMapClickBtn.addEventListener('click', () => {
-        this.disableMapClickMode();
-        this.updateRouteInfo('');
-      });
-    }
-
-    // Close modal on overlay click
-    const modalOverlay = document.querySelector('.modal-overlay');
-    if (modalOverlay) {
-      modalOverlay.addEventListener('click', () => {
-        this.hideLocationModal();
-      });
-    }
-  }
-
-  private clearAllRoutes() {
-    // Clear all direction renderers
-    this.directionsRenderers.forEach((renderer) => {
-      renderer.setMap(null);
+      // Handle remove stop buttons in trip panel
+      if (target.classList.contains('remove-stop-btn')) {
+        const stopId = target.getAttribute('data-stop-id');
+        if (stopId) {
+          this.removeStop(stopId);
+        }
+      }
     });
-    this.directionsRenderers = [];
-    this.routes = [];
-    this.clearSelection();
-
-    // Update info based on whether starting location is set
-    if (this.startingLocation) {
-      this.updateRouteInfo('Click a resort to route from your location');
-    } else {
-      this.updateRouteInfo('');
-    }
   }
 }
 

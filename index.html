@@ -21,39 +21,51 @@
               </div>
             </div>
           </div>
-          <button id="clearRoutes">Clear Routes</button>
-          <button id="setStartLocation">Set Start Location</button>
+          <button id="addCustomStop">Add Custom Stop</button>
           <div id="routeInfo"></div>
         </div>
       </header>
       <div id="map"></div>
     </div>
 
-    <!-- Modal for location selection -->
-    <div id="locationModal" class="modal hidden">
-      <div class="modal-overlay"></div>
-      <div class="modal-content">
-        <h2>Set Your Starting Location</h2>
-        <div class="location-options">
-          <button id="useCurrentLocation" class="location-option">
-            <span class="icon">📍</span>
-            <span class="title">Use My Location</span>
-            <span class="description">Use GPS to set current position</span>
-          </button>
-          <button id="clickOnMap" class="location-option">
-            <span class="icon">📌</span>
-            <span class="title">Click on Map</span>
-            <span class="description">Choose any location manually</span>
-          </button>
-        </div>
-        <button id="cancelModal" class="cancel-button">Cancel</button>
+    <!-- Trip Panel -->
+    <div id="tripPanel" class="trip-panel hidden">
+      <div class="trip-panel-header">
+        <h2>Trip Planner</h2>
+        <button id="clearTrip" class="clear-trip-btn" title="Clear all stops">Clear All</button>
       </div>
-    </div>
 
-    <!-- Banner for map click mode -->
-    <div id="mapClickBanner" class="map-banner hidden">
-      <span>Click anywhere on the map to set your starting location</span>
-      <button id="cancelMapClick">Cancel</button>
+      <div class="trip-panel-content">
+        <div id="emptyState" class="empty-state">
+          <div class="empty-icon">🗺️</div>
+          <p><strong>Start planning your ski trip!</strong></p>
+          <ul>
+            <li>Click "Add Custom Stop" to add any location</li>
+            <li>Click resort markers and press "Add to Trip"</li>
+            <li>Build your route stop by stop</li>
+          </ul>
+        </div>
+
+        <div id="stopsList" class="stops-list hidden"></div>
+
+        <div id="tripSummary" class="trip-summary hidden">
+          <h3>Trip Summary</h3>
+          <div class="summary-grid">
+            <div class="summary-item">
+              <span class="summary-label">Total Distance</span>
+              <span id="totalDistance" class="summary-value">-</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Total Time</span>
+              <span id="totalDuration" class="summary-value">-</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Stops</span>
+              <span id="totalStops" class="summary-value">-</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Toast notifications -->

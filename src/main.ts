@@ -1,7 +1,8 @@
 import './style.css';
 import { skiResorts } from './resorts';
-import { SkiResort, PrecipitationData, TripStop, RouteSegment } from './types';
+import { SkiResort, PrecipitationData, PowderScoreData, TripStop, RouteSegment } from './types';
 import precipitationData from '../snowfall_forecast.json';
+import powderScoreData from '../powder-scores.json';
 import mapConfig from '../map-config.json';
 
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -17,6 +18,7 @@ class SkiMapApp {
   private snowOverlays: google.maps.Marker[] = [];
   private rainOverlays: google.maps.Marker[] = [];
   private precipitationData: PrecipitationData = precipitationData as PrecipitationData;
+  private powderScoreData: PowderScoreData = powderScoreData as PowderScoreData;
   private showPrecipitation: boolean = true;
   private startDay: number = 0; // First day (today)
   private endDay: number = 6;   // 7 days total (0-6)
@@ -28,6 +30,7 @@ class SkiMapApp {
   private mapClickListener: google.maps.MapsEventListener | null = null;
   private isAddingCustomStop: boolean = false;
   private customStopCounter: number = 0;
+  private powderTableVisible: boolean = false;
 
   private getMarkerColor(pass: string): string {
     switch (pass) {
@@ -375,6 +378,121 @@ class SkiMapApp {
     this.showPrecipitation = show;
     this.snowOverlays.forEach(overlay => overlay.setMap(show ? this.map : null));
     this.rainOverlays.forEach(overlay => overlay.setMap(show ? this.map : null));
+  }
+
+  // ============================================================================
+  // POWDER SCORE TABLE METHODS
+  // ============================================================================
+
+  private togglePowderTable() {
+    this.powderTableVisible = !this.powderTableVisible;
+    const overlay = document.getElementById('powderTableOverlay');
+    if (overlay) {
+      if (this.powderTableVisible) {
+        overlay.classList.remove('hidden');
+        this.renderPowderTable();
+      } else {
+        overlay.classList.add('hidden');
+      }
+    }
+  }
+
+  private renderPowderTable() {
+    const table = document.getElementById('powderScoreTable');
+    if (!table) return;
+
+    const thead = table.querySelector('thead tr');
+    const tbody = table.querySelector('tbody');
+    if (!thead || !tbody) return;
+
+    // Clear existing content except first header cell
+    while (thead.children.length > 1) {
+      thead.removeChild(thead.lastChild!);
+    }
+    tbody.innerHTML = '';
+
+    // Get all dates from first resort (they should all have the same dates)
+    if (this.powderScoreData.resorts.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="100" style="text-align: center; padding: 2rem;">No powder score data available</td></tr>';
+      return;
+    }
+
+    const dates = this.powderScoreData.resorts[0].daily_forecast.map(day => day.date);
+    const today = this.powderScoreData.resorts[0].daily_forecast.find(day => day.is_today)?.date;
+
+    // Add date headers
+    dates.forEach(date => {
+      const th = document.createElement('th');
+      const dateObj = new Date(date);
+      const isToday = date === today;
+
+      th.innerHTML = `
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <span style="font-size: 0.75rem; color: #6b7280;">${dateObj.toLocaleDateString('en-US', { weekday: 'short' })}</span>
+          <span style="font-weight: 600;">${dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+          ${isToday ? '<span style="font-size: 0.7rem; color: #667eea;">TODAY</span>' : ''}
+        </div>
+      `;
+      if (isToday) {
+        th.classList.add('today-column');
+      }
+      thead.appendChild(th);
+    });
+
+    // Sort resorts alphabetically by name
+    const sortedResorts = [...this.powderScoreData.resorts].sort((a, b) =>
+      a.resort_info.name.localeCompare(b.resort_info.name)
+    );
+
+    // Add resort rows
+    sortedResorts.forEach(resort => {
+      const tr = document.createElement('tr');
+
+      // Resort name cell
+      const resortCell = document.createElement('td');
+      resortCell.className = 'resort-cell';
+      resortCell.innerHTML = `
+        <div>
+          <div style="font-weight: 600;">${resort.resort_info.name}</div>
+          <div style="font-size: 0.75rem; color: #6b7280;">${resort.resort_info.region}</div>
+        </div>
+      `;
+      tr.appendChild(resortCell);
+
+      // Score cells
+      resort.daily_forecast.forEach(day => {
+        const td = document.createElement('td');
+        const score = day.powder_score.total_score;
+
+        td.className = 'score-cell';
+        if (score >= 20) {
+          td.classList.add('score-excellent');
+        } else if (score >= 10) {
+          td.classList.add('score-good');
+        } else if (score >= 5) {
+          td.classList.add('score-fair');
+        } else {
+          td.classList.add('score-poor');
+        }
+
+        if (day.is_today) {
+          td.classList.add('today-column');
+        }
+
+        // Add tooltip with details
+        const snow = day.precipitation.snow_inches.toFixed(1);
+        const rain = day.precipitation.rain_inches;
+        const temp = Math.round(day.temperature.avg_f);
+        const accum = day.powder_score.accumulated_3day_inches.toFixed(1);
+
+        td.title = `Score: ${score}\nSnow: ${snow}"\nTemp: ${temp}°F\n3-day: ${accum}"${rain > 0 ? `\nRain: ${rain.toFixed(1)}"` : ''}`;
+        td.textContent = score.toString();
+
+        tr.appendChild(td);
+      });
+
+      tbody.appendChild(tr);
+    });
   }
 
   // ============================================================================
@@ -817,6 +935,31 @@ class SkiMapApp {
         this.showPrecipitation = !this.showPrecipitation;
         this.togglePrecipitationOverlay(this.showPrecipitation);
         toggleButton.textContent = this.showPrecipitation ? 'Hide Weather' : 'Show Weather';
+      });
+    }
+
+    // Powder Score Table buttons
+    const togglePowderTableButton = document.getElementById('togglePowderTable');
+    if (togglePowderTableButton) {
+      togglePowderTableButton.addEventListener('click', () => {
+        this.togglePowderTable();
+      });
+    }
+
+    const closePowderTableButton = document.getElementById('closePowderTable');
+    if (closePowderTableButton) {
+      closePowderTableButton.addEventListener('click', () => {
+        this.togglePowderTable();
+      });
+    }
+
+    // Close powder table when clicking outside the container
+    const powderTableOverlay = document.getElementById('powderTableOverlay');
+    if (powderTableOverlay) {
+      powderTableOverlay.addEventListener('click', (e) => {
+        if (e.target === powderTableOverlay) {
+          this.togglePowderTable();
+        }
       });
     }
 

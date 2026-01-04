@@ -72,3 +72,55 @@ export interface TripSummary {
   resortCount: number;
   customCount: number;
 }
+
+export interface PowderScoreData {
+  generated_at: string;
+  formula: string;
+  parameters: {
+    optimal_temp_range: string;
+    lookback_days: number;
+    forecast_days: number;
+    lookback_window: number;
+  };
+  resorts: PowderScoreResort[];
+}
+
+export interface PowderScoreResort {
+  resort_info: {
+    id: string;
+    name: string;
+    region: string;
+    country: string;
+    latitude: number;
+    longitude: number;
+  };
+  summary: {
+    best_powder_day: string;
+    best_powder_score: number;
+    total_snow_7day_inches: number;
+  };
+  daily_forecast: DailyPowderForecast[];
+}
+
+export interface DailyPowderForecast {
+  date: string;
+  is_today: boolean;
+  temperature: {
+    min_f: number;
+    max_f: number;
+    avg_f: number;
+  };
+  precipitation: {
+    snow_inches: number;
+    rain_inches: number;
+    total_inches: number;
+  };
+  powder_score: {
+    total_score: number;
+    snow_today_inches: number;
+    accumulated_3day_inches: number;
+    temp_quality_factor: number;
+    rain_penalty_factor: number;
+    days_since_last_rain: string | number;
+  };
+}

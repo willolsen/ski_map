@@ -21,6 +21,7 @@
               </div>
             </div>
           </div>
+          <button id="togglePowderTable">Powder Scores</button>
           <button id="addCustomStop">Add Custom Stop</button>
           <div id="routeInfo"></div>
         </div>
@@ -64,6 +65,33 @@
               <span id="totalStops" class="summary-value">-</span>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Powder Score Table Overlay -->
+    <div id="powderTableOverlay" class="powder-table-overlay hidden">
+      <div class="powder-table-container">
+        <div class="powder-table-header">
+          <h2>Powder Score Forecast</h2>
+          <button id="closePowderTable" class="close-btn">&times;</button>
+        </div>
+        <div class="powder-table-info">
+          <p><strong>Formula:</strong> (Snow Today × 5 + 3-day Accum × 2) × Temp Quality × Rain Penalty</p>
+          <p><strong>Optimal Temp:</strong> 15-25°F | <strong>Score Range:</strong> 0-50+</p>
+        </div>
+        <div class="powder-table-wrapper">
+          <table id="powderScoreTable" class="powder-score-table">
+            <thead>
+              <tr>
+                <th class="resort-column">Resort</th>
+                <!-- Date columns will be added dynamically -->
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Rows will be added dynamically -->
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

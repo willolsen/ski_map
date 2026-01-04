@@ -496,6 +496,210 @@ button:active {
   cursor: crosshair !important;
 }
 
+/* Powder Score Table Overlay */
+.powder-table-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.powder-table-overlay.hidden {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.powder-table-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 90vw;
+  max-width: 1400px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.powder-table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 12px 12px 0 0;
+}
+
+.powder-table-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.close-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  line-height: 1;
+  padding: 0;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+.powder-table-info {
+  padding: 1rem 2rem;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.powder-table-info p {
+  margin: 0.25rem 0;
+}
+
+.powder-table-wrapper {
+  overflow: auto;
+  flex: 1;
+  padding: 1rem;
+}
+
+.powder-score-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.powder-score-table thead {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.powder-score-table th {
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 2px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.powder-score-table th.resort-column {
+  text-align: left;
+  position: sticky;
+  left: 0;
+  background: white;
+  z-index: 11;
+  min-width: 200px;
+  padding-left: 1rem;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+}
+
+.powder-score-table tbody tr {
+  border-bottom: 1px solid #e5e7eb;
+  transition: background 0.2s;
+}
+
+.powder-score-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.powder-score-table td {
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  color: #1f2937;
+}
+
+.powder-score-table td.resort-cell {
+  text-align: left;
+  font-weight: 500;
+  position: sticky;
+  left: 0;
+  background: inherit;
+  padding-left: 1rem;
+  z-index: 9;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+}
+
+.powder-score-table tbody tr:hover td.resort-cell {
+  background: #f9fafb;
+}
+
+.score-cell {
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
+.score-excellent {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.score-good {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.score-fair {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.score-poor {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.today-column {
+  background: #fef3c7;
+  font-weight: 600;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .trip-panel {
@@ -508,5 +712,26 @@ button:active {
 
   .trip-panel.hidden {
     transform: translateY(100%);
+  }
+
+  .powder-table-container {
+    width: 95vw;
+    max-height: 90vh;
+  }
+
+  .powder-table-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .powder-table-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .powder-score-table {
+    font-size: 0.8rem;
+  }
+
+  .powder-score-table th.resort-column {
+    min-width: 150px;
   }
 }

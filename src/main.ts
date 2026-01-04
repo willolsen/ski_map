@@ -31,6 +31,8 @@ class SkiMapApp {
   private isAddingCustomStop: boolean = false;
   private customStopCounter: number = 0;
   private powderTableVisible: boolean = false;
+  private currentSortColumn: string | null = null;
+  private currentSortDirection: 'asc' | 'desc' = 'asc';
 
   private getMarkerColor(pass: string): string {
     switch (pass) {
@@ -420,17 +422,39 @@ class SkiMapApp {
     const dates = this.powderScoreData.resorts[0].daily_forecast.map(day => day.date);
     const today = this.powderScoreData.resorts[0].daily_forecast.find(day => day.is_today)?.date;
 
-    // Add date headers
-    dates.forEach(date => {
+    // Update resort column header to be sortable
+    const resortHeader = thead.querySelector('th.resort-column') as HTMLElement;
+    if (resortHeader) {
+      resortHeader.classList.add('sortable');
+      resortHeader.setAttribute('data-sort', 'resort');
+      resortHeader.style.cursor = 'pointer';
+      const sortIndicator = this.currentSortColumn === 'resort'
+        ? `<span class="sort-indicator">${this.currentSortDirection === 'asc' ? '▲' : '▼'}</span>`
+        : '<span class="sort-indicator">⇅</span>';
+      resortHeader.innerHTML = `Resort ${sortIndicator}`;
+    }
+
+    // Add date headers with sorting
+    dates.forEach((date, index) => {
       const th = document.createElement('th');
       const dateObj = new Date(date);
       const isToday = date === today;
+
+      th.classList.add('sortable');
+      th.setAttribute('data-sort', `date-${index}`);
+      th.setAttribute('data-date', date);
+      th.style.cursor = 'pointer';
+
+      const sortIndicator = this.currentSortColumn === `date-${index}`
+        ? `<span class="sort-indicator">${this.currentSortDirection === 'asc' ? '▲' : '▼'}</span>`
+        : '<span class="sort-indicator">⇅</span>';
 
       th.innerHTML = `
         <div style="display: flex; flex-direction: column; align-items: center;">
           <span style="font-size: 0.75rem; color: #6b7280;">${dateObj.toLocaleDateString('en-US', { weekday: 'short' })}</span>
           <span style="font-weight: 600;">${dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
           ${isToday ? '<span style="font-size: 0.7rem; color: #667eea;">TODAY</span>' : ''}
+          ${sortIndicator}
         </div>
       `;
       if (isToday) {
@@ -439,10 +463,8 @@ class SkiMapApp {
       thead.appendChild(th);
     });
 
-    // Sort resorts alphabetically by name
-    const sortedResorts = [...this.powderScoreData.resorts].sort((a, b) =>
-      a.resort_info.name.localeCompare(b.resort_info.name)
-    );
+    // Sort resorts based on current sort column
+    const sortedResorts = this.sortResorts([...this.powderScoreData.resorts]);
 
     // Add resort rows
     sortedResorts.forEach(resort => {
@@ -460,7 +482,7 @@ class SkiMapApp {
       tr.appendChild(resortCell);
 
       // Score cells
-      resort.daily_forecast.forEach(day => {
+      resort.daily_forecast.forEach((day: any) => {
         const td = document.createElement('td');
         const score = day.powder_score.total_score;
 
@@ -493,6 +515,54 @@ class SkiMapApp {
 
       tbody.appendChild(tr);
     });
+
+    // Add click handlers for sorting
+    thead.querySelectorAll('th.sortable').forEach(th => {
+      th.addEventListener('click', () => {
+        const sortColumn = th.getAttribute('data-sort');
+        if (sortColumn) {
+          this.handleSort(sortColumn);
+        }
+      });
+    });
+  }
+
+  private sortResorts(resorts: any[]): any[] {
+    if (!this.currentSortColumn) {
+      // Default: alphabetical by name
+      return resorts.sort((a, b) =>
+        a.resort_info.name.localeCompare(b.resort_info.name)
+      );
+    }
+
+    if (this.currentSortColumn === 'resort') {
+      // Sort by resort name
+      return resorts.sort((a, b) => {
+        const comparison = a.resort_info.name.localeCompare(b.resort_info.name);
+        return this.currentSortDirection === 'asc' ? comparison : -comparison;
+      });
+    }
+
+    // Sort by date score
+    const dateIndex = parseInt(this.currentSortColumn.split('-')[1]);
+    return resorts.sort((a, b) => {
+      const scoreA = a.daily_forecast[dateIndex]?.powder_score.total_score || 0;
+      const scoreB = b.daily_forecast[dateIndex]?.powder_score.total_score || 0;
+      const comparison = scoreA - scoreB;
+      return this.currentSortDirection === 'asc' ? comparison : -comparison;
+    });
+  }
+
+  private handleSort(column: string) {
+    if (this.currentSortColumn === column) {
+      // Toggle direction
+      this.currentSortDirection = this.currentSortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      // New column, default to descending for scores (highest first), ascending for resort names
+      this.currentSortColumn = column;
+      this.currentSortDirection = column === 'resort' ? 'asc' : 'desc';
+    }
+    this.renderPowderTable();
   }
 
   // ============================================================================

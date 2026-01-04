@@ -627,6 +627,28 @@ button:active {
   white-space: nowrap;
 }
 
+.powder-score-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.powder-score-table th.sortable:hover {
+  background: #f3f4f6;
+}
+
+.sort-indicator {
+  display: inline-block;
+  margin-left: 0.25rem;
+  font-size: 0.7rem;
+  color: #9ca3af;
+  transition: color 0.2s;
+}
+
+.powder-score-table th.sortable:hover .sort-indicator {
+  color: #667eea;
+}
+
 .powder-score-table th.resort-column {
   text-align: left;
   position: sticky;

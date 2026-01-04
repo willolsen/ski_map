@@ -14,7 +14,7 @@ const __dirname = dirname(__filename);
 // Configuration
 const API_BASE_URL = 'api.open-meteo.com';
 const PAST_DAYS = 5;
-const FORECAST_DAYS = 7;
+const FORECAST_DAYS = 16; // Maximum supported by Open-Meteo API
 const LOOKBACK_WINDOW = 3;
 
 // Read resort data
@@ -179,13 +179,17 @@ async function processResort(resort) {
     const todayIndex = PAST_DAYS;
     const forecastDays = [];
 
+    // Get today's date in YYYY-MM-DD format
+    const today = new Date();
+    const todayStr = today.toISOString().split('T')[0];
+
     for (let i = todayIndex; i < Math.min(weatherData.length, todayIndex + FORECAST_DAYS); i++) {
       const day = weatherData[i];
       const powderData = calculatePowderScore(weatherData, i);
 
       forecastDays.push({
         date: day.date,
-        is_today: i === todayIndex,
+        is_today: day.date === todayStr,
         temperature: {
           min_f: Math.round(day.temp_min * 10) / 10,
           max_f: Math.round(day.temp_max * 10) / 10,

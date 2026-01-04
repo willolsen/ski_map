@@ -13,6 +13,7 @@ class SkiMapApp {
   private map!: google.maps.Map;
   private markers: Map<string, google.maps.Marker> = new Map();
   private directionsService!: google.maps.DirectionsService;
+  private geocoder!: google.maps.Geocoder;
   private snowOverlays: google.maps.Marker[] = [];
   private rainOverlays: google.maps.Marker[] = [];
   private precipitationData: PrecipitationData = precipitationData as PrecipitationData;
@@ -129,6 +130,7 @@ class SkiMapApp {
     this.map.fitBounds(bounds);
 
     this.directionsService = new google.maps.DirectionsService();
+    this.geocoder = new google.maps.Geocoder();
   }
 
   private initResortMarkers() {
@@ -431,9 +433,9 @@ class SkiMapApp {
 
     this.showToast('Click on map to add a stop');
 
-    this.mapClickListener = this.map.addListener('click', (event: google.maps.MapMouseEvent) => {
+    this.mapClickListener = this.map.addListener('click', async (event: google.maps.MapMouseEvent) => {
       if (event.latLng && this.isAddingCustomStop) {
-        this.addCustomStop(event.latLng);
+        await this.addCustomStop(event.latLng);
         this.disableCustomStopMode();
       }
     });
@@ -459,22 +461,57 @@ class SkiMapApp {
     }
   }
 
-  private addCustomStop(location: google.maps.LatLng) {
+  private async addCustomStop(location: google.maps.LatLng) {
     this.customStopCounter++;
+
+    // Show loading toast
+    this.showToast('Getting location info...');
+
+    // Try to get a meaningful name from reverse geocoding
+    let customName = `Custom Stop ${this.customStopCounter}`;
+
+    try {
+      const result = await this.geocoder.geocode({ location: location });
+
+      if (result.results && result.results.length > 0) {
+        // Try to find a good label from the results
+        const firstResult = result.results[0];
+
+        // Look for a place name, street address, or locality
+        const placeResult = result.results.find(r =>
+          r.types.includes('establishment') ||
+          r.types.includes('point_of_interest') ||
+          r.types.includes('street_address')
+        );
+
+        if (placeResult && placeResult.formatted_address) {
+          // Use formatted address but shorten it
+          const parts = placeResult.formatted_address.split(',');
+          customName = parts.slice(0, 2).join(','); // Use first 2 parts (e.g., "Street, City")
+        } else if (firstResult.formatted_address) {
+          // Fall back to first result
+          const parts = firstResult.formatted_address.split(',');
+          customName = parts.slice(0, 2).join(',');
+        }
+      }
+    } catch (error) {
+      console.error('Geocoding error:', error);
+      // Fall back to generic name if geocoding fails
+    }
 
     const stop: TripStop = {
       id: this.generateStopId(),
       order: this.tripStops.length + 1,
       location: location,
       type: 'custom',
-      customName: `Custom Stop ${this.customStopCounter}`
+      customName: customName
     };
 
     this.tripStops.push(stop);
     this.createStopMarker(stop);
     this.updateTripPanel();
     this.calculateTripRoute();
-    this.showToast(`Stop ${this.customStopCounter} added to trip`);
+    this.showToast(`${customName} added to trip`);
   }
 
   private createStopMarker(stop: TripStop) {
